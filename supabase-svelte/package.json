@@ -20,6 +20,7 @@
     "vite": "^4.2.0"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.21.0"
+    "@supabase/supabase-js": "^2.21.0",
+    "svelte-routing": "^1.8.7"
   }
 }
