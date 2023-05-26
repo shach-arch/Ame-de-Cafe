@@ -1,19 +1,30 @@
 <script>
     import { onMount } from 'svelte';
     import { readable, get } from 'svelte/store';
-
+  
   
     let selectedCoffee = '';
     let selectedDonut = '';
     let totalPrice = 0;
   
     const productOptions = readable([], set => {
-      fetch('https://api.supabase.io/v1/table/product?product_group=in.(tea,coffee,beverages,food)')
-        .then(response => response.json())
-        .then(data => set(data))
-        .catch(error => console.error(error));
-    });
-  
+    fetch('https://api.supabase.io/v1/table/product?select=*&product_group=eq.{productGroup}', {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer Wtpl4lK8slvqGFdOpFfJjhq8qZP54rASHjI9w6s315LaJ/RbP4LNt9sX5qxfV6IWmSYWYKTDK141w5lPt8LUhg=='
+    },
+    mode: 'no-cors'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      return response.json();
+    })
+    .then(data => set(data))
+    .catch(error => console.error(error));
+})
     const coffeeOptions = readable([], set => {
       const unsubscribe = productOptions.subscribe(value => {
         const options = value.filter(product => product.product_group === 'coffee');
@@ -35,7 +46,7 @@
       const donutPrice = get(donutOptions).find(donut => donut.name === selectedDonut)?.price || 0;
       totalPrice = coffeePrice + donutPrice;
     }
-  
+
     function submitOrder() {
       // Handle submitting the order
       console.log('Order submitted!');

@@ -17,6 +17,6 @@
     "src/**/*.js",
     "src/**/*.svelte",
     "vite-env.d.ts"
-  ],
+, "cors.ts"  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
