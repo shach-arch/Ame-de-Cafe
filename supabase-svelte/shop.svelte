@@ -11,44 +11,29 @@
 
   const supabase = createClient(url, anonKey);
   
-  
-  async function fetchAll() {
-    let { data: Products, error } = await supabase.from("Products").select("*");
-
-    if ((error = null)) {
-      console.log(error);
-    } else {
-      console.log(Products);
-    }
-  }
-
-  fetchAll();
-
-
   const coffeeOptions = writable([]);// Declare and initialize coffeeOptions variable
   const donutOptions = writable([]);// Declare and initialize donutOptions variable
   const totalPrice = writable(0);// Declare and initialize totalPrice variable
 
   let selectedDonut = ""; // Declare and initialize selectedDonut variable
   let selectedCoffee = ""; // Declare and initialize selectedCoffee variable
-
-
+ 
   // Update the total price when the selected coffee or donut changes
   async function updateTotalPrice() {
   try {
     const { data: coffeeData } = await supabase
       .from('Products')
-      .select('product,current_retail_price')
+      .select('product,current_wholesale_price')
       .match({ product_group: 'Whole Bean/Teas' });
 
-    const selectedCoffeePrice = coffeeData.find((coffee) => coffee.product === selectedCoffee)?.current_retail_price || 0;
+    const selectedCoffeePrice = coffeeData.find((coffee) => coffee.product === selectedCoffee)?.current_wholesale_price || 0;
 
     const { data: donutData } = await supabase
       .from('Products')
-      .select('product,current_retail_price')
+      .select('product,current_wholesale_price')
       .match({ product_group: 'Food' });
 
-    const donutPrice = donutData.find((donut) => donut.product === selectedDonut)?.current_retail_price || 0;
+    const donutPrice = donutData.find((donut) => donut.product === selectedDonut)?.current_wholesale_price || 0;
 
     totalPrice.set(parseFloat(selectedCoffeePrice) + parseFloat(donutPrice));
   } catch (error) {
