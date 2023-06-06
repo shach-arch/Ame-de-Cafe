@@ -47,6 +47,12 @@
     console.log("Selected coffee:", selectedCoffee);
     console.log("Selected donut:", selectedDonut);
     console.log("Total price:", totalPrice);
+
+  // Credit card processing would go here
+  const CreditCard = document.getElementById('CreditCard');
+  if(CreditCard){
+    CreditCard.style.display = 'block';
+  }
   }
 
  // Fetch products that match the specified product groups
@@ -97,9 +103,27 @@ supabase
     </select>
   
     <p>Total Price: ${$totalPrice.toFixed(2)}</p>
-
-  
     <button type="submit" disabled={!(selectedCoffee && selectedDonut)}>Place Order</button>
+    
+    <!-- Add this element to display the prompt -->
+    <div id="CreditCard" class="card-prompt" style="display: none;">
+      <h2>Enter Credit Card Information</h2>
+      <form>
+        <div class="form-group">
+          <label for="cardNumber">Card Number:</label>
+          <input type="text" id="cardNumber" placeholder="Card Number" />
+        </div>
+        <div class="form-group">
+          <label for="expiryDate">Expiry Date:</label>
+          <input type="text" id="expiryDate" placeholder="MM/YYYY" />
+        </div>
+        <div class="form-group">
+          <label for="cvv">CVV:</label>
+          <input type="text" id="cvv" placeholder="CVV" />
+        </div>
+        <button  type="submit">Pay Now</button>
+      </form>
+    </div>
   </form>
 </main>
 
@@ -131,4 +155,62 @@ supabase
   button:hover {
     background-color: #f5f5f5;
   }
+
+ 
+
+  .card-prompt {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.card-prompt h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.card-prompt .form-group {
+  margin-bottom: 10px;
+}
+
+.card-prompt label {
+  display: block;
+  font-weight: bold;
+}
+
+.card-prompt input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.card-prompt button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.card-prompt button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+button{
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
 </style>
