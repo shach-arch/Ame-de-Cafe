@@ -48,6 +48,20 @@
     console.log("Selected donut:", selectedDonut);
     console.log("Total price:", totalPrice);
 
+    const button = document.getElementById('myButton');
+    const loadingScreen = document.getElementById('loadingScreen');
+
+  button.addEventListener('click', () => {
+    button.setAttribute('disabled', 'disabled');
+    loadingScreen.style.display = 'block';
+
+    // Perform the desired action (e.g., form submission, API call, etc.)
+    // After the action is complete, hide the loading screen and enable the button again
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+      button.removeAttribute('disabled');
+    }, 2000);
+  });
   // Credit card processing would go here
   const CreditCard = document.getElementById('CreditCard');
   if(CreditCard){
@@ -103,7 +117,10 @@ supabase
     </select>
   
     <p>Total Price: ${$totalPrice.toFixed(2)}</p>
-    <button type="submit" disabled={!(selectedCoffee && selectedDonut)}>Place Order</button>
+    <button id = "myButton"type="submit" disabled={!(selectedCoffee && selectedDonut)}>Place Order</button>
+    <div id="loadingScreen" class="loading-screen" style="display: none;">
+      <div class="loader"></div>
+      </div>
     
     <!-- Add this element to display the prompt -->
     <div id="CreditCard" class="card-prompt" style="display: none;">
@@ -155,8 +172,6 @@ supabase
   button:hover {
     background-color: #f5f5f5;
   }
-
- 
 
   .card-prompt {
   width: 300px;
@@ -211,6 +226,34 @@ button{
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+}
+.loading-screen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 </style>
