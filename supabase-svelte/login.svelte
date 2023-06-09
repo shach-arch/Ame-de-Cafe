@@ -3,6 +3,7 @@
 <script>
   import { AuthError, createClient } from '@supabase/supabase-js';
   import{navigate} from 'svelte-routing';
+  import 'bootstrap/dist/js/bootstrap.min.js';
 
   const supabaseUrl = 'https://ujnattukwsqsjmzuhyoh.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqbmF0dHVrd3Nxc2ptenVoeW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU1OTUyMDgsImV4cCI6MjAwMTE3MTIwOH0.G9dIZVpPY5ylDQD63YRjGFGuP3LGtECuQndt8OdxtZM'; 
@@ -35,12 +36,11 @@
       console.error(error);
     }
   }
-
-  import 'bootstrap/dist/css/bootstrap.min.css';
 </script>
 
 <main>
   <style>
+      @import 'bootstrap/dist/css/bootstrap.min.css';
     main {
       max-width: 800px;
       margin: 0 auto;
