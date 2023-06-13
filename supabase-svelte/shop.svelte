@@ -97,32 +97,105 @@ supabase
 </script>
 
 <main>
-  <h1>Order Page</h1>
+  <head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Events</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="src/css/bootstrap.min.css">
+    <!-- style css -->
+    <link rel="stylesheet" type="text/css" href="src/css/style.css">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="src/css/responsive.css">
+    <!-- fevicon -->
+    <link rel="icon" href="src/images/fevicon.png" type="image/gif" />
+    <!-- font css -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="src/css/jquery.mCustomScrollbar.min.css">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+ </head>
 
-  <form on:submit|preventDefault={submitOrder}>
-    <label for="coffee">Select Coffee:</label>
-    <select id="coffee" bind:value={selectedCoffee} on:change={updateTotalPrice}>
-      <option value="">-- Choose a coffee --</option>
-      {#each $coffeeOptions as coffee}
-        <option value={coffee}>{coffee}</option>
-      {/each}
-    </select>
-  
-    <label for="donut">Select Donut:</label>
-    <select id="donut" bind:value={selectedDonut} on:change={updateTotalPrice}>
-      <option value="">-- Choose a donut --</option>
-      {#each $donutOptions as donut}
-        <option value={donut}>{donut}</option>
-      {/each}
-    </select>
-  
-    <p>Total Price: ${$totalPrice.toFixed(2)}</p>
-    <button id = "myButton"type="submit" disabled={!(selectedCoffee && selectedDonut)}>Place Order</button>
-    <div id="loadingScreen" class="loading-screen" style="display: none;">
-      <div class="loader"></div>
-      </div>
-    
-    <!-- Add this element to display the prompt -->
+ <body>
+
+  <div class="header_section header_bg">
+    <div class="container-fluid">
+       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="home.html"><img src="src/images/favicon.ico"></a>
+          <p class="logo_text">Ame de cafe Express</p>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+             <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                   <a class="nav-link" href="./home.html">Home</a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="./shop.html">Shop</a>
+                </li>
+                <li class="nav-item active">
+                   <a class="nav-link" href="./events.html">Events</a>
+                </li>
+              
+             </ul>
+             <form class="form-inline my-2 my-lg-0">
+                <div class="login_bt">
+                   <ul>
+                      <li><a href="#"><span class="user_icon"><i class="fa fa-user" aria-hidden="true"></i></span>Login</a></li>
+                   </ul>
+                </div>
+             </form>
+          </div>
+       </nav>
+    </div>
+ </div>
+ <div class="blog_section layout_padding">
+  <div class="container">
+     <div class="row">
+        <div class="col-md-12">
+           <h1 class="about_taital">Order Page</h1>
+        </div>
+     </div>
+     <div class="blog_section_2">
+        <div class="row">
+           <div class="col-md-6">
+                 <form on:submit|preventDefault={submitOrder}>
+                  <label for="coffee">Select Coffee:</label>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <select id="coffee" bind:value={selectedCoffee} on:change={updateTotalPrice}>
+                      <option value="">-- Choose a coffee --</option>
+                      {#each $coffeeOptions as coffee}
+                        <option value={coffee}>{coffee}</option>
+                      {/each}
+                    </select>
+                  </div>
+                  <label for="donut">Select Donut:</label>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <select id="donut" bind:value={selectedDonut} on:change={updateTotalPrice}>
+                      <option value="">-- Choose a donut --</option>
+                      {#each $donutOptions as donut}
+                        <option value={donut}>{donut}</option>
+                      {/each}
+                    </select>
+                  </div>
+                  <p>Total Price: ${$totalPrice.toFixed(2)}</p>
+                  <button id = "myButton"type="submit" disabled={!(selectedCoffee && selectedDonut)}>Place Order</button>
+                  <div id="loadingScreen" class="loading-screen" style="display: none;">
+                    <div class="loader"></div>
+                    </div>
+              </div>
+             <!-- Add this element to display the prompt -->
     <div id="CreditCard" class="card-prompt" style="display: none;">
       <h2>Enter Credit Card Information</h2>
       <form>
@@ -141,119 +214,17 @@ supabase
         <button  type="submit">Pay Now</button>
       </form>
     </div>
-  </form>
+     </div>
+  </div>
+</div>
+ </body>
+    
 </main>
 
 <style>
-  main {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
+  button{
+    color: darksalmon;
+    border: 2px solid darksalmon;
+    background-color: white;
   }
-  h1 {
-    text-align: center;
-  }
-  form {
-    display: inline;
-  }
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  button {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-    background-color: #fff;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #f5f5f5;
-  }
-
-  .card-prompt {
-  width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f2f2f2;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.card-prompt h2 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.card-prompt .form-group {
-  margin-bottom: 10px;
-}
-
-.card-prompt label {
-  display: block;
-  font-weight: bold;
-}
-
-.card-prompt input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.card-prompt button[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.card-prompt button[type="submit"]:hover {
-  background-color: #45a049;
-}
-
-button{
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}
-.loading-screen {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-}
-
-.loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 </style>
