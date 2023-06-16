@@ -15,6 +15,7 @@
   const donutOptions = writable([]);// Declare and initialize donutOptions variable
   const totalPrice = writable(0);// Declare and initialize totalPrice variable
   const orderStatus = writable('Pending');
+  const cartCount = writable(0); // Declare and initialize cartCount variable
 
   let selectedDonut = ""; // Declare and initialize selectedDonut variable
   let selectedCoffee = ""; // Declare and initialize selectedCoffee variable
@@ -41,13 +42,35 @@
     console.error('Error fetching data from Supabase:', error);
   }
 }
+// Fetch the price for "Espresso Roast" from the database
+async function fetchEspressoRoastPrice() {
+  try {
+    const { data } = await supabase
+      .from('Products')
+      .select('current_wholesale_price')
+      .match({ product: 'Espresso Roast' })
+      .single();
+
+    const espressoRoastPrice = parseFloat(data?.current_wholesale_price || 0);
+    return espressoRoastPrice;
+
+  } catch (error) {
+    console.error('Error fetching data from Supabase:', error);
+    return {
+      price: 0,
+          }
+  }
+}
+
 function updateOrderStatus(status) {
   orderStatus.set(status);
 }
 
+function addToCart() {
+    cartCount.update((count) => count + 1);
+  }
   
   function submitOrder() {
-
       // Order submitted
   updateOrderStatus('Submitted');
     // Handle submitting the order
@@ -75,6 +98,7 @@ function updateOrderStatus(status) {
   if(CreditCard){
     CreditCard.style.display = 'block';
   }
+  addToCart();
   }
 
  // Fetch products that match the specified product groups
@@ -282,6 +306,11 @@ supabase
                       <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i><i class="fas fa-star text-secondary"></i>
                       <i class="fas fa-star text-secondary"></i>
                     </label>
+                    <!--to be move (dont like currect position)-->
+                    <h3>Cart</h3>
+                    <p>Items: <span id="cartCount">0</span></p>
+                    <p>Selected Item Price: <span id="selectedPrice">0</span></p>
+                    <p>Total Price: <span id="totalPrice">0</span></p>
                   </div>
                 </div>
               </div>
@@ -289,6 +318,8 @@ supabase
           </div>
         </div>
       </div>
+
+    
       <!-- sidebar -->
 
 
@@ -383,7 +414,7 @@ supabase
               </div>
             </div>
             <div class="col-xl-6 col-md-5 col-sm-7">
-              <h5>Men's Denim Jeans Shorts</h5>
+              <h5>Espresso Roast</h5>
               <div class="d-flex flex-row">
                 <div class="text-warning mb-1 me-2">
                   <i class="fa fa-star"></i>
@@ -397,21 +428,23 @@ supabase
                 </div>
                 <span class="text-muted">73 orders</span>
               </div>
-
               <p class="text mb-4 mb-md-0">
-                Re-engineered Digital Crown with hapti Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua tempor incididunt ut
-                labore et dolore magna [...]
+                Our house blend for a good espresso shot.
               </p>
             </div>
+            <!-- gets item price from database and display it -->
             <div class="col-xl-3 col-md-3 col-sm-5">
               <div class="d-flex flex-row align-items-center mb-1">
-                <h4 class="mb-1 me-1">$34,50</h4>
-                <span class="text-danger"><s>$49.99</s></span>
+                {#await fetchEspressoRoastPrice()}
+                <p>Loading price...</p>
+              {:then espressoRoastPrice}
+                <h4 class="mb-1 me-1">${espressoRoastPrice.toFixed(2)}</h4>
+              {:catch error}
+                <p>Error fetching price: {error.message}</p>
+              {/await}
               </div>
-              <h6 class="text-warning">Paid shipping</h6>
               <div class="mt-4">
-                <button class="btn btn-primary shadow-0" type="button">Buy this</button>
-                <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
+                <button class="btn btn-primary shadow-0" type="button" on:click="{submitOrder}">Buy this</button>
               </div>
             </div>
           </div>
