@@ -14,6 +14,7 @@
   const coffeeOptions = writable([]);// Declare and initialize coffeeOptions variable
   const donutOptions = writable([]);// Declare and initialize donutOptions variable
   const totalPrice = writable(0);// Declare and initialize totalPrice variable
+  const orderStatus = writable('Pending');
 
   let selectedDonut = ""; // Declare and initialize selectedDonut variable
   let selectedCoffee = ""; // Declare and initialize selectedCoffee variable
@@ -40,8 +41,15 @@
     console.error('Error fetching data from Supabase:', error);
   }
 }
+function updateOrderStatus(status) {
+  orderStatus.set(status);
+}
+
   
   function submitOrder() {
+
+      // Order submitted
+  updateOrderStatus('Submitted');
     // Handle submitting the order
     console.log("Order submitted!");
     console.log("Selected coffee:", selectedCoffee);
