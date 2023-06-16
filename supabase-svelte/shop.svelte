@@ -48,7 +48,7 @@ async function fetchEspressoRoastPrice() {
     const { data } = await supabase
       .from('Products')
       .select('current_wholesale_price')
-      .match({ product: 'Espresso Roast' })
+      .match({ product:'Espresso Roast' })
       .single();
 
     const espressoRoastPrice = parseFloat(data?.current_wholesale_price || 0);
@@ -59,6 +59,23 @@ async function fetchEspressoRoastPrice() {
     return {
       price: 0,
           }
+  }
+}
+async function fetchCivetCatPrice(){
+  try{
+    const { data } = await supabase
+    .from('Products')
+    .select('current_wholesale_price')
+    .match({product:'Civet Cat'})
+    .single();
+
+    const civetCatPrice = parseFloat(data?.current_wholesale_price || 0);
+    return civetCatPrice;
+  }catch(error){
+    console.error('Error fetching data from Supabase:', error);
+    return {
+      price: 0,
+    }
   }
 }
 
@@ -361,7 +378,7 @@ supabase
               </div>
             </div>
             <div class="col-xl-6 col-md-5 col-sm-7">
-              <h5>Rucksack Backpack Jeans</h5>
+              <h5>Civet Cat</h5>
               <div class="d-flex flex-row">
                 <div class="text-warning mb-1 me-2">
                   <i class="fa fa-star"></i>
@@ -377,19 +394,25 @@ supabase
               </div>
 
               <p class="text mb-4 mb-md-0">
-                Short description about the product goes here, for ex its features. Lorem ipsum dolor sit amet with hapti you enter into any new area of science, you almost lorem ipsum is great text
-                consectetur adipisicing
+                The most expensive coffee in the world, the cats do all the work. 
               </p>
             </div>
             <div class="col-xl-3 col-md-3 col-sm-5">
               <div class="d-flex flex-row align-items-center mb-1">
-                <h4 class="mb-1 me-1">$34,50</h4>
-                <span class="text-danger"><s>$49.99</s></span>
+              {#await fetchCivetCatPrice}
+                <p>Loading price...</p>
+              {:then civetCatPrice}
+                {#if typeof civetCatPrice === 'number'}
+                  <h4 class="mb-1 me-1">${civetCatPrice.toFixed(2)}</h4>
+                {:else}
+                  <p>Error: invalid</p>
+                {/if}
+              {:catch error}
+                <p>Error fetching price: {error.message}</p>
+              {/await}
               </div>
-              <h6 class="text-success">Free shipping</h6>
               <div class="mt-4">
                 <button class="btn btn-primary shadow-0" type="button">Buy this</button>
-                <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
               </div>
             </div>
           </div>
