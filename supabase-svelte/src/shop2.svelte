@@ -246,14 +246,6 @@
           <p class="mb-0">This is content within an <code>.offcanvas-lg</code>.</p>
         </div>
       </div>
-
-      <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </div>
-
       <!-- <div class="flex-shrink-0 p-3 offcanvas-md" style="width: 280px;">
           <span class="fs-5 fw-semibold">Collapsible</span>
         <ul class="list-unstyled ps-0">
