@@ -179,153 +179,242 @@
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
     crossorigin="anonymous"
   />
+  <link rel="stylesheet" href="./src/css/sidebars.css">
 </head>
 
 <body>
-    <!-- Top Nav -->
-    <section>
-      <div class="header_section header_bg s-zK8PAMszfbUo">
-        <div class="container-fluid s-zK8PAMszfbUo">
-          <nav
-            class="navbar navbar-expand-lg navbar-light bg-light s-zK8PAMszfbUo"
-          >
-            <a class="navbar-brand s-zK8PAMszfbUo" href="home.html"
-              ><img src="src/images/favicon.ico" class="s-zK8PAMszfbUo" /></a
-            >
-            <p class="logo_text s-zK8PAMszfbUo">Ame de cafe Express</p>
-            <button
-              class="navbar-toggler s-zK8PAMszfbUo"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-              ><span class="navbar-toggler-icon s-zK8PAMszfbUo" /></button
-            >
-            <div
-              class="collapse navbar-collapse s-zK8PAMszfbUo"
-              id="navbarSupportedContent"
-            >
-              <ul class="navbar-nav ml-auto s-zK8PAMszfbUo">
-                <li class="nav-item s-zK8PAMszfbUo">
-                  <a class="nav-link s-zK8PAMszfbUo" href="./home.html">Home</a>
-                </li>
-                <li class="nav-item s-zK8PAMszfbUo">
-                  <a class="nav-link s-zK8PAMszfbUo" href="./shop.html">Shop</a>
-                </li>
-                <li class="nav-item active s-zK8PAMszfbUo">
-                  <a class="nav-link s-zK8PAMszfbUo" href="./events.html"
-                    >Events</a
-                  >
-                </li>
-              </ul>
-              <form class="form-inline my-2 my-lg-0 s-zK8PAMszfbUo">
-                <div class="login_bt s-zK8PAMszfbUo">
-                  <ul class="s-zK8PAMszfbUo">
-                    <li class="s-zK8PAMszfbUo">
-                      <a href="#" class="s-zK8PAMszfbUo"
-                        ><span class="user_icon s-zK8PAMszfbUo"
-                          ><i
-                            class="fa fa-user s-zK8PAMszfbUo"
-                            aria-hidden="true"
-                          /></span
-                        >Login</a
-                      >
-                    </li>
-                  </ul>
-                </div>
-              </form>
-            </div>
-          </nav>
+  <!-- Top Nav -->
+  <section>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img
+            src="src/images/favicon.ico"
+            alt="Logo"
+            width="30"
+            height="24"
+            class="d-inline-block align-text-top"
+          />
+          Ame de cafe Express
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarText"
+          aria-controls="navbarText"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon" />
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="./home.html"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./shop.html">Shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./events.html">Events</a>
+            </li>
+          </ul>
+          <span class="navbar-text"> Login </span>
+        </div>
+      </div>
+    </nav>
+  </section>
+
+
+  <div class="d-flex flex-column flex-lg-row">
+    <!-- Side Bar -->
+    <section class="p-2">
+
+      <button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">Toggle offcanvas</button>
+
+      <div class="alert alert-info d-none d-lg-block">Resize your browser to show the responsive offcanvas toggle.</div>
+
+      <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Responsive offcanvas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <p class="mb-0">This is content within an <code>.offcanvas-lg</code>.</p>
         </div>
       </div>
 
-      <nav
-        class="navbar navbar-dark bg-dark"
-        aria-label="Dark offcanvas navbar"
-      >
+      <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Dark offcanvas navbar</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasNavbarDark"
-            aria-controls="offcanvasNavbarDark"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon" />
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
           </button>
-          <div
-            class="offcanvas offcanvas-end text-bg-dark"
-            tabindex="-1"
-            id="offcanvasNavbarDark"
-            aria-labelledby="offcanvasNavbarDarkLabel"
-          >
-            <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasNavbarDarkLabel">
-                Offcanvas
-              </h5>
-              <button
-                type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              />
-            </div>
-            <div class="offcanvas-body">
-              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#"
-                    >Home</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
+        </div>
+
+      <!-- <div class="flex-shrink-0 p-3 offcanvas-md" style="width: 280px;">
+          <span class="fs-5 fw-semibold">Collapsible</span>
+        <ul class="list-unstyled ps-0">
+          <li class="mb-1">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#home-collapse"
+              aria-expanded="false"
+            >
+              Menu
+            </button>
+            <div class="collapse" id="home-collapse" style="">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
                   <a
-                    class="nav-link dropdown-toggle"
                     href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Coffee</a
                   >
-                    Dropdown
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li>
-                      <a class="dropdown-item" href="#">Another action</a>
-                    </li>
-                    <li>
-                      <hr class="dropdown-divider" />
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </li>
-                  </ul>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Tea</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Food</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Beverages</a
+                  >
                 </li>
               </ul>
-              <form class="d-flex mt-3" role="search">
-                <input
-                  class="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button class="btn btn-outline-success" type="submit"
-                  >Search</button
-                >
-              </form>
             </div>
-          </div>
-        </div>
-      </nav>
+          </li>
+          <li class="mb-1">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#dashboard-collapse"
+              aria-expanded="false"
+            >
+              Sizes
+            </button>
+            <div class="collapse" id="dashboard-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Large</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Small</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="mb-1">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#orders-collapse"
+              aria-expanded="false"
+            >
+              Orders
+            </button>
+            <div class="collapse" id="orders-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >New</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Processed</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                    >Shipped</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="border-top my-3" />
+          <li class="mb-1">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#account-collapse"
+              aria-expanded="false"
+            >
+              Cart
+            </button>
+            <div class="collapse" id="account-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                
+                <li class="link-dark d-inline-flex text-decoration-none rounded">
+                  <a
+                    href="#"
+                    class="link-dark d-inline-flex text-decoration-none rounded"
+                    >Items: <span id="cartCount"> 0</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-dark d-inline-flex text-decoration-none rounded"
+                    > Selected Item Price: <span id="selectedPrice">0</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="link-dark d-inline-flex text-decoration-none rounded"
+                    >Total Price: <span id="totalPrice">0</span></a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div> -->
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-  </body>
+
+    <!-- Content -->
+    <section class="p-2 flex-fill" style="background-color:aquamarine;">
+      <img src="./static/cat.jpeg" alt="" />
+    </section>
+  </div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"
+  ></script>
+</body>
 
 <style>
   /* button {

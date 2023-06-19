@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8">
   </head>
-  <body>
-    <div id="app"></div>
+  <body id="app">
 
-    <script type="module">
-      import Shop from './shop.svelte';
-
-      const app = new Shop({
-        target: document.getElementById('app')
-      });
-    </script>
+    
   </body>
+  <script type="module">
+    import Shop from './shop.svelte';
+
+    const app = new Shop({
+      target: document.getElementById('app')
+    });
+  </script>
 </html>
