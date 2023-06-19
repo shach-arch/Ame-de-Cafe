@@ -2,7 +2,6 @@
 
 <script>
 // @ts-nocheck
-
   import { AuthError, createClient } from '@supabase/supabase-js';
   import{navigate} from 'svelte-routing';
   import 'bootstrap/dist/js/bootstrap.min.js';
@@ -99,6 +98,7 @@
                           <h5 class="tasty_text">Tasty Of Ame de cafe Express</h5>
                           <div class="btn_main">
                             <div class="about_bt">
+                              
                               <form on:submit|preventDefault={login}>
                                 <div class="mb-3">
                                   <label for="email" class="form-label">Email address</label>
