@@ -1,6 +1,6 @@
 <script>
   import { createClient } from "@supabase/supabase-js";
-  import { onMount } from "svelte";
+  import { afterUpdate,onMount } from "svelte";
   import { writable, get } from "svelte/store";
   // import { getStores, navigating, page, updated } from '$app/stores';
   // import { Pagination } from 'flowbite-svelte'
@@ -60,42 +60,10 @@
       console.error("Error fetching data from Supabase:", error);
     }
   }
-  // Fetch the price for "Espresso Roast" from the database
-  async function fetchEspressoRoastPrice() {
-    try {
-      const { data } = await supabase
-        .from("Products")
-        .select("current_wholesale_price")
-        .match({ product: "Espresso Roast" })
-        .single();
 
-      const espressoRoastPrice = parseFloat(data?.current_wholesale_price || 0);
-      return espressoRoastPrice;
-    } catch (error) {
-      console.error("Error fetching data from Supabase:", error);
-      return {
-        price: 0,
-      };
-    }
-  }
-  async function fetchCivetCatPrice() {
-    try {
-      const { data } = await supabase
-        .from("Products")
-        .select("current_wholesale_price")
-        .match({ product: "Civet Cat" })
-        .single();
-
-      const civetCatPrice = parseFloat(data?.current_wholesale_price || 0);
-      return civetCatPrice;
-    } catch (error) {
-      console.error("Error fetching data from Supabase:", error);
-      return {
-        price: 0,
-      };
-    }
-  }
-
+  /**
+     * @param {string} status
+     */
   function updateOrderStatus(status) {
     orderStatus.set(status);
   }
@@ -103,7 +71,6 @@
   function addToCart() {
     cartCount.update((count) => count + 1);
   }
-
   function submitOrder() {
     // Order submitted
     updateOrderStatus("Submitted");
@@ -113,27 +80,61 @@
     console.log("Selected donut:", selectedDonut);
     console.log("Total price:", totalPrice);
 
-    const button = document.getElementById("myButton");
+    const button = document.getElementById("buyButton");
     const loadingScreen = document.getElementById("loadingScreen");
 
-    button.addEventListener("click", () => {
-      button.setAttribute("disabled", "disabled");
-      loadingScreen.style.display = "block";
+    button.setAttribute("disabled", "disabled");
+    loadingScreen.style.display = "block";
 
-      // Perform the desired action (e.g., form submission, API call, etc.)
-      // After the action is complete, hide the loading screen and enable the button again
-      setTimeout(() => {
-        loadingScreen.style.display = "none";
-        button.removeAttribute("disabled");
-      }, 2000);
-    });
-    // Credit card processing would go here
-    const CreditCard = document.getElementById("CreditCard");
-    if (CreditCard) {
-      CreditCard.style.display = "block";
-    }
+    // Perform the desired action (e.g., form submission, API call, etc.)
+    // After the action is complete, hide the loading screen and enable the button again
+    setTimeout(() => {
+      loadingScreen.style.display = "none";
+      button.removeAttribute("disabled");
+    }, 2000);
     addToCart();
   }
+
+  let showCreditCardPrompt = false;
+  let creditCardPromptElement;
+  function showPrompt() {
+    const prompt = document.getElementById("CreditCard");
+    prompt.style.display = "block";
+  }
+  function closePrompt() {
+    const prompt = document.getElementById("CreditCard")
+    prompt.style.display = "none";
+  }
+
+  function handlePayment(event) {
+    event.preventDefault();
+    const cardNumber = event.target.elements.cardNumber.value;
+    const expiryDate = event.target.elements.expiryDate.value;
+    const cvv = event.target.elements.cvv.value;
+    // Perform payment processing or API call with the provided credit card information
+    console.log("Card Number:", cardNumber);
+    console.log("Expiry Date:", expiryDate);
+    console.log("CVV:", cvv);
+
+    // Reset the form and hide the credit card prompt
+    event.target.reset();
+    showCreditCardPrompt = false;
+  }
+  function restrictToNumbers(event) {
+    const input = event.target;
+    const inputValue = input.value;
+    input.value = inputValue.replace(/[^0-9]/g, '');
+  }
+
+  afterUpdate(() => {
+    if (showCreditCardPrompt) {
+      creditCardPromptElement.style.display = "block";
+    }
+  });
+
+  onMount(() => {
+    creditCardPromptElement = document.getElementById("CreditCard");
+  });
 
   // Fetch products that match the specified product groups
   const coffeeGroups = ["Whole Bean/Teas", "Beverages"];
@@ -160,6 +161,7 @@
   onMount(() => {
     updateTotalPrice();
   });
+
 </script>
 
 <main>
@@ -440,6 +442,7 @@
                           Selected Item Price: <span id="selectedPrice">0</span>
                         </p>
                         <p>Total Price: <span id="totalPrice">0</span></p>
+                        <button id="checkoutButton" on:click={showPrompt}>Checkout</button>
                       </div>
                     </div>
                   </div>
@@ -534,7 +537,7 @@
                         </div>
                         <h6 class="text-success">Free shipping</h6>
                         <div class="mt-4">
-                          <button class="btn btn-primary shadow-0" type="button"
+                          <button class="btn btn-primary shadow-0" type="button" id="buyButton" on:click={submitOrder}
                             >Buy this</button
                           >
                           <a
@@ -609,8 +612,7 @@
                             <div class="mt-4">
                               <button
                                 class="btn btn-primary shadow-0"
-                                type="button">Buy this</button
-                              >
+                                type="button" id="buyButton" on:click={submitOrder}>Buy this</button>
                             </div>
                           </div>
                         </div>
@@ -665,41 +667,48 @@
             </nav> -->
             <!-- Pagination -->
             <!-- Add this element to display the prompt -->
-            <div id="CreditCard" class="card-prompt" style="display: none;">
+            <div id="CreditCard" class="card-prompt" style="display: none" >
               <h2>Enter Credit Card Information</h2>
-              <form>
+              <form on:submit={handlePayment}>
                 <div class="form-group">
                   <label for="cardNumber">Card Number:</label>
-                  <input
-                    type="text"
-                    id="cardNumber"
-                    placeholder="Card Number"
-                  />
+                  <input type="text" id="cardNumber" name="cardNumber" placeholder="Card Number" on:input={restrictToNumbers} required />
                 </div>
                 <div class="form-group">
                   <label for="expiryDate">Expiry Date:</label>
-                  <input type="text" id="expiryDate" placeholder="MM/YYYY" />
+                  <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YYYY" on:input={restrictToNumbers} required />
                 </div>
                 <div class="form-group">
                   <label for="cvv">CVV:</label>
-                  <input type="text" id="cvv" placeholder="CVV" />
+                  <input type="text" id="cvv" name="cvv" placeholder="CVV" on:input={restrictToNumbers} required />
                 </div>
                 <button type="submit">Pay Now</button>
+                <button class="close-button" on:click={closePrompt}>Close</button>
               </form>
             </div>
-          </div>
-        </div>
-      </div>
+            <div id="loadingScreen" style="display: none;">
+              <!-- Placeholder for loading screen -->
+              Loading...
+            </div>            
     </section>
     <!-- <script src="pagination copy.js"></script> -->
-    </body
-  >
+    </body>
 </main>
 
 <style>
   button {
     color: darksalmon;
     border: 2px solid darksalmon;
+    background-color: white;
+  }
+
+  .card-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid black;
+    padding: 20px;
     background-color: white;
   }
 </style>
