@@ -179,7 +179,7 @@
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
     crossorigin="anonymous"
   />
-  <link rel="stylesheet" href="./src/css/sidebars.css">
+  <link rel="stylesheet" href="./src/css/sidebars.css" />
 </head>
 
 <body>
@@ -228,176 +228,264 @@
     </nav>
   </section>
 
-
   <div class="d-flex flex-column flex-lg-row">
     <!-- Side Bar -->
     <section class="p-2">
+      <button
+        class="btn btn-primary d-lg-none"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasResponsive"
+        aria-controls="offcanvasResponsive">Show Filters</button
+      >
 
-      <button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">Toggle offcanvas</button>
+      <div class="flex-shrink-0 p-3 d-none d-lg-block" style="width: 280px;">
+        <h3 class="fs-5 fw-semibold">Filters</h3>
+      </div>
 
-      <div class="alert alert-info d-none d-lg-block">Resize your browser to show the responsive offcanvas toggle.</div>
-
-      <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
+      <!-- Offcanvas -->
+      <div
+        class="offcanvas-lg offcanvas-start"
+        tabindex="-1"
+        id="offcanvasResponsive"
+        aria-labelledby="offcanvasResponsiveLabel"
+      >
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Responsive offcanvas</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
+          <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Filters</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            data-bs-target="#offcanvasResponsive"
+            aria-label="Close"
+          />
         </div>
+
+        <!-- Body -->
         <div class="offcanvas-body">
-          <p class="mb-0">This is content within an <code>.offcanvas-lg</code>.</p>
+          <ul class="list-unstyled ps-0">
+            <li class="mb-1">
+              <button
+                class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#home-collapse"
+                aria-expanded="false"
+              >
+                Menu
+              </button>
+              <div class="collapse" id="home-collapse" style="">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >Coffee</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >Tea</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >Food</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >Beverages</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="mb-1">
+              <button
+                class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#dashboard-collapse"
+                aria-expanded="false"
+              >
+                Sizes
+              </button>
+              <div class="collapse" id="dashboard-collapse">
+                <ul class="list-group small">
+                  <li class="list-group-item">
+                    <input
+                      class="form-check-input me-1"
+                      type="checkbox"
+                      value=""
+                      id="smCheckbox"
+                    />
+                    <label class="form-check-label" for="smCheckbox"
+                      >Small</label
+                    >
+                  </li>
+                  <li class="list-group-item">
+                    <input
+                      class="form-check-input me-1"
+                      type="checkbox"
+                      value=""
+                      id="lgCheckbox"
+                    />
+                    <label class="form-check-label" for="lgCheckbox"
+                      >Large</label
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="mb-1">
+              <button
+                class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#orders-collapse"
+                aria-expanded="false"
+              >
+                Orders
+              </button>
+              <div class="collapse" id="orders-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >New</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >Processed</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >Shipped</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="border-top my-3" />
+            <li class="mb-1">
+              <button
+                class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#account-collapse"
+                aria-expanded="false"
+              >
+                Cart
+              </button>
+              <div class="collapse" id="account-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li
+                    class="link-dark d-inline-flex text-decoration-none rounded"
+                  >
+                    <a
+                      href="#"
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      >Items: <span id="cartCount"> 0</span></a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                    >
+                      Selected Item Price: <span id="selectedPrice">0</span></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-      <!-- <div class="flex-shrink-0 p-3 offcanvas-md" style="width: 280px;">
-          <span class="fs-5 fw-semibold">Collapsible</span>
-        <ul class="list-unstyled ps-0">
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#home-collapse"
-              aria-expanded="false"
-            >
-              Menu
-            </button>
-            <div class="collapse" id="home-collapse" style="">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Coffee</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Tea</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Food</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Beverages</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#dashboard-collapse"
-              aria-expanded="false"
-            >
-              Sizes
-            </button>
-            <div class="collapse" id="dashboard-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Large</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Small</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#orders-collapse"
-              aria-expanded="false"
-            >
-              Orders
-            </button>
-            <div class="collapse" id="orders-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >New</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Processed</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                    >Shipped</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="border-top my-3" />
-          <li class="mb-1">
-            <button
-              class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#account-collapse"
-              aria-expanded="false"
-            >
-              Cart
-            </button>
-            <div class="collapse" id="account-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                
-                <li class="link-dark d-inline-flex text-decoration-none rounded">
-                  <a
-                    href="#"
-                    class="link-dark d-inline-flex text-decoration-none rounded"
-                    >Items: <span id="cartCount"> 0</span></a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-dark d-inline-flex text-decoration-none rounded"
-                    > Selected Item Price: <span id="selectedPrice">0</span></a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="link-dark d-inline-flex text-decoration-none rounded"
-                    >Total Price: <span id="totalPrice">0</span></a
-                  >
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </div> -->
     </section>
 
     <!-- Content -->
-    <section class="p-2 flex-fill" style="background-color:aquamarine;">
-      <img src="./static/cat.jpeg" alt="" />
+    <section class="p-2 flex-fill">
+      {#await productList}
+        <p>...waiting</p>
+      {:then data}
+        {#each data as item}
+          <div class="row justify-content-center mb-3">
+            <div class="col-md-12">
+              <div class="card shadow-0 border rounded-3">
+                <div class="card-body">
+                  <div class="row g-0">
+                    <div
+                      class="col-xl-3 col-md-4 d-flex justify-content-center"
+                    >
+                      <div
+                        class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0"
+                      >
+                        <img
+                          src="./static/images/{item.product_group}.jpg"
+                          class="w-100 h-100 img-fluid rounded"
+                          alt="{item.product_group}.png"
+                        />
+                        <a href="#!">
+                          <div class="hover-overlay">
+                            <div
+                              class="mask"
+                              style="background-color: rgba(253, 253, 253, 0.15);"
+                            />
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-5 col-sm-7">
+                      <h5>{item.product}</h5>
+                      <div class="d-flex flex-row">
+                        <div class="text-warning mb-1 me-2">
+                          <i class="fa fa-star" />
+                          <i class="fa fa-star" />
+                          <i class="fa fa-star" />
+                          <i class="fa fa-star" />
+                          <i class="fas fa-star-half-alt" />
+                          <span class="ms-1"> 4.5 </span>
+                          <br />
+                        </div>
+                      </div>
+
+                      <p class="text mb-4 mb-md-0">
+                        {item.product_description}
+                      </p>
+                    </div>
+                    <div class="col-xl-2 col-md-3 col-sm-5">
+                      <div class="d-flex flex-row align-items-center mb-1">
+                        <p>{item.current_retail_price}</p>
+                      </div>
+                      <div class="mt-4">
+                        <button class="btn btn-primary shadow-0" type="button"
+                          >Buy this</button
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {/each}
+      {:catch error}
+        <p style="color: red">{error.message}</p>
+      {/await}
+
+      <hr />
     </section>
   </div>
 
@@ -409,9 +497,9 @@
 </body>
 
 <style>
-  /* button {
+  button {
     color: darksalmon;
     border: 2px solid darksalmon;
     background-color: white;
-  } */
+  }
 </style>
