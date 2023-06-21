@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
   </head>
+  <style>
+    /* html,
+    body {
+      width: 100%;
+      overflow-y: hidden;
+    } */
+  </style>
   <body>
     <div id="app"></div>
 
     <script type="module">
-      import Shop from './src/shop2.svelte';
+      import Shop from "./src/shop2.svelte";
 
       const app = new Shop({
-        target: document.getElementById('app')
+        target: document.getElementById("app"),
       });
     </script>
   </body>
