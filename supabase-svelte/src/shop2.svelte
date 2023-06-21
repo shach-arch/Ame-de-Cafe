@@ -204,7 +204,7 @@
 
 <body>
   <!-- Top Nav -->
-  <section>
+  <section class="noScroll">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -347,9 +347,9 @@
                       value=""
                       id="smCheckbox"
                     />
-                      <label class="form-check-label" for="smCheckbox"
-                        >Small</label
-                      >
+                    <label class="form-check-label" for="smCheckbox"
+                      >Small</label
+                    >
                   </li>
                   <li class="list-group-item">
                     <input
@@ -439,7 +439,7 @@
     </section>
 
     <!-- Content -->
-    <section class="p-2 flex-fill">
+    <section class="p-3 mb-3 flex-fill scroll">
       {#await productList}
         <p>...waiting</p>
       {:then data}
@@ -525,5 +525,14 @@
     color: darksalmon;
     border: 2px solid darksalmon;
     background-color: white;
+  }
+
+  .scroll {
+    height: 1080px;
+    overflow-y: scroll;
+  }
+
+  .noScroll {
+    overflow-y: hidden;
   }
 </style>
