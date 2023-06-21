@@ -347,13 +347,9 @@
                       value=""
                       id="smCheckbox"
                     />
-                    {#if smallYes}
                       <label class="form-check-label" for="smCheckbox"
                         >Small</label
                       >
-                    {:else}
-                      <label class="form-check-label" for="smCheckbox">☆</label>
-                    {/if}
                   </li>
                   <li class="list-group-item">
                     <input
