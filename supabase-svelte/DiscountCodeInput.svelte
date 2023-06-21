@@ -1,49 +1,48 @@
 <!-- DiscountCodeInput.svelte -->
 <script>
-    let discountCode = '';
-    let isCodeValid = false;
-    let discountAmount = 0;
-  
-    const validDiscountCodes = [
-      { code: 'SUMMER25', discount: 0.25 },
-      { code: 'SALE50', discount: 0.5 },
-      // Add more valid discount codes if needed
-    ];
-  
-    function applyDiscountCode() {
-      const enteredCode = discountCode.trim().toUpperCase();
-      const matchedCode = validDiscountCodes.find((code) => code.code === enteredCode);
-  
-      if (matchedCode) {
-        // Code is valid
-        isCodeValid = true;
-        discountAmount = matchedCode.discount;
-  
-        // Update the total price after applying the discount
-        updateTotalPrice();
-      } else {
-        // Code is invalid
-        isCodeValid = false;
-        discountAmount = 0;
-      }
+  import { writable } from 'svelte/store';
+
+  export let totalCost;
+  export const total = writable(totalCost || 0); // Initialize with a default value of 0
+
+  let discountCode = '';
+  let isCodeValid = false;
+  let discountAmount = 0;
+
+  const discountCodes = {
+    CODE1: 0.1, // 10% discount
+    CODE2: 0.2, // 20% discount
+    SALE50: 0.5, // 50% discount
+  };
+
+  function applyDiscountCode(discountCode) {
+    const enteredCode = discountCode.trim().toUpperCase();
+    const discountAmount = discountCodes[enteredCode];
+
+    if (discountAmount) {
+      // Code is valid
+      isCodeValid = true;
+      total.update(currentTotal => {
+        const discountedTotal = currentTotal - currentTotal * discountAmount;
+        console.log("Discount applied:", discountAmount * 100 + "%");
+        console.log("Cost after discount:", discountedTotal);
+        return discountedTotal;
+      });
+    } else {
+      // Code is invalid
+      isCodeValid = false;
+      console.log("Invalid discount code:", discountCode);
     }
-  
-    // Update the total price when the selected coffee or donut changes
-    function updateTotalPrice() {
-      const selectedCoffeePrice = parseFloat(selectedCoffeePrice);
-      const donutPrice = parseFloat(donutPrice);
-      const discountedPrice = (selectedCoffeePrice + donutPrice) * (1 - discountAmount);
-  
-      totalPrice.set(discountedPrice);
-    }
-  </script>
-  
-  <div>
-    <input type="text" bind:value="{discountCode}" />
-    <button on:click="{applyDiscountCode}">Apply Code</button>
-  
-    {#if isCodeValid}
-      <p>Discount code applied!</p>
-    {/if}
-  </div>
-  
+  }
+</script>
+
+<div>
+  <input type="text" bind:value="{discountCode}" />
+  <button on:click="{() => applyDiscountCode(discountCode)}">Apply Code</button>
+
+  {#if isCodeValid}
+    <p>Discount code applied!</p>
+    <p>Cost after discount: ${$total}</p>
+  {/if}
+</div>
+

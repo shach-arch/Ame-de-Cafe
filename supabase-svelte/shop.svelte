@@ -1,9 +1,15 @@
 <script>
   import { createClient } from "@supabase/supabase-js";
-  import { onMount } from "svelte";
-  import { writable, get } from "svelte/store";
+  import { afterUpdate,onMount } from "svelte";
+  import { writable, derived  } from "svelte/store";
+  import DiscountCodeInput from './DiscountCodeInput.svelte';
   // import { getStores, navigating, page, updated } from '$app/stores';
   // import { Pagination } from 'flowbite-svelte'
+  export const itemsInCart = writable(0);
+  export const totalCost = writable(0);
+  export const discountAmount = writable(0);
+  export const isCodeValid = false;
+  export const applyDiscountCode = writable([]);
 
   const url = "https://ujnattukwsqsjmzuhyoh.supabase.co";
 
@@ -14,14 +20,10 @@
 
   const coffeeOptions = writable([]); // Declare and initialize coffeeOptions variable
   const donutOptions = writable([]); // Declare and initialize donutOptions variable
-  const totalPrice = writable(0); // Declare and initialize totalPrice variable
   const orderStatus = writable("Pending");
-  const cartCount = writable(0); // Declare and initialize cartCount variable
-
-  let selectedDonut = ""; // Declare and initialize selectedDonut variable
-  let selectedCoffee = ""; // Declare and initialize selectedCoffee variable
-
+  
   let productList = loadData();
+  
 
   // Load everything in the Products database
   async function loadData() {
@@ -35,105 +37,93 @@
   }
 
   // Update the total price when the selected coffee or donut changes
-  async function updateTotalPrice() {
-    try {
-      const { data: coffeeData } = await supabase
-        .from("Products")
-        .select("product,current_wholesale_price")
-        .match({ product_group: "Whole Bean/Teas" });
-
-      const selectedCoffeePrice =
-        coffeeData.find((coffee) => coffee.product === selectedCoffee)
-          ?.current_wholesale_price || 0;
-
-      const { data: donutData } = await supabase
-        .from("Products")
-        .select("product,current_wholesale_price")
-        .match({ product_group: "Food" });
-
-      const donutPrice =
-        donutData.find((donut) => donut.product === selectedDonut)
-          ?.current_wholesale_price || 0;
-
-      totalPrice.set(parseFloat(selectedCoffeePrice) + parseFloat(donutPrice));
-    } catch (error) {
-      console.error("Error fetching data from Supabase:", error);
-    }
-  }
-  // Fetch the price for "Espresso Roast" from the database
-  async function fetchEspressoRoastPrice() {
-    try {
-      const { data } = await supabase
-        .from("Products")
-        .select("current_wholesale_price")
-        .match({ product: "Espresso Roast" })
-        .single();
-
-      const espressoRoastPrice = parseFloat(data?.current_wholesale_price || 0);
-      return espressoRoastPrice;
-    } catch (error) {
-      console.error("Error fetching data from Supabase:", error);
-      return {
-        price: 0,
-      };
-    }
-  }
-  async function fetchCivetCatPrice() {
-    try {
-      const { data } = await supabase
-        .from("Products")
-        .select("current_wholesale_price")
-        .match({ product: "Civet Cat" })
-        .single();
-
-      const civetCatPrice = parseFloat(data?.current_wholesale_price || 0);
-      return civetCatPrice;
-    } catch (error) {
-      console.error("Error fetching data from Supabase:", error);
-      return {
-        price: 0,
-      };
-    }
-  }
-
   function updateOrderStatus(status) {
     orderStatus.set(status);
   }
 
   function addToCart() {
-    cartCount.update((count) => count + 1);
+    itemsInCart.update(items => items + 1);
   }
+  function updateTotalPrice() {
+  const priceElement = document.getElementById("currentPrice");
+  const priceValue = priceElement.innerHTML;
+  const priceWithoutSymbol = priceValue.replace("$", ""); // Remove the "$" symbol
+  const cost = parseFloat(priceWithoutSymbol);
+
+  if (!isNaN(cost)) {
+    totalCost.update(total => {
+      const updatedTotal = total + cost;
+      const formattedTotal = updatedTotal.toFixed(2); // Format the total to 2 decimal places
+      console.log("Total cost:", formattedTotal);
+      return parseFloat(formattedTotal); // Return the formatted total as a number
+    });
+  } else {
+    console.log("Invalid price value:", priceValue);
+  }
+}
 
   function submitOrder() {
     // Order submitted
     updateOrderStatus("Submitted");
     // Handle submitting the order
     console.log("Order submitted!");
-    console.log("Selected coffee:", selectedCoffee);
-    console.log("Selected donut:", selectedDonut);
-    console.log("Total price:", totalPrice);
 
-    const button = document.getElementById("myButton");
+    const button = document.getElementById("buyButton");
     const loadingScreen = document.getElementById("loadingScreen");
 
-    button.addEventListener("click", () => {
-      button.setAttribute("disabled", "disabled");
-      loadingScreen.style.display = "block";
+    button.setAttribute("disabled", "disabled");
+    loadingScreen.style.display = "block";
 
-      // Perform the desired action (e.g., form submission, API call, etc.)
-      // After the action is complete, hide the loading screen and enable the button again
-      setTimeout(() => {
-        loadingScreen.style.display = "none";
-        button.removeAttribute("disabled");
-      }, 2000);
-    });
-    // Credit card processing would go here
-    const CreditCard = document.getElementById("CreditCard");
-    if (CreditCard) {
-      CreditCard.style.display = "block";
-    }
+    // Perform the desired action (e.g., form submission, API call, etc.)
+    // After the action is complete, hide the loading screen and enable the button again
+    setTimeout(() => {
+      loadingScreen.style.display = "none";
+      button.removeAttribute("disabled");
+    }, 2000);
     addToCart();
+    updateTotalPrice();
   }
+
+  let showCreditCardPrompt = false;
+  let creditCardPromptElement;
+  function showPrompt() {
+    const prompt = document.getElementById("CreditCard");
+    prompt.style.display = "block";
+  }
+  function closePrompt() {
+    const prompt = document.getElementById("CreditCard")
+    prompt.style.display = "none";
+  }
+
+  function handlePayment(event) {
+    event.preventDefault();
+    const cardNumber = event.target.elements.cardNumber.value;
+    const expiryDate = event.target.elements.expiryDate.value;
+    const cvv = event.target.elements.cvv.value;
+    // Perform payment processing or API call with the provided credit card information
+    console.log("Card Number:", cardNumber);
+    console.log("Expiry Date:", expiryDate);
+    console.log("CVV:", cvv);
+
+    // Reset the form and hide the credit card prompt
+    event.target.reset();
+    showCreditCardPrompt = false;
+  }
+  function restrictToNumbers(event) {
+    const input = event.target;
+    const inputValue = input.value;
+    input.value = inputValue.replace(/[^0-9]/g, '');
+  }
+
+  afterUpdate(() => {
+    if (showCreditCardPrompt) {
+      creditCardPromptElement.style.display = "block";
+    }
+  });
+
+  onMount(() => {
+    creditCardPromptElement = document.getElementById("CreditCard");
+  });
 
   // Fetch products that match the specified product groups
   const coffeeGroups = ["Whole Bean/Teas", "Beverages"];
@@ -157,9 +147,6 @@
       const donutProducts = data.map((item) => item.product);
       donutOptions.set(donutProducts);
     });
-  onMount(() => {
-    updateTotalPrice();
-  });
 </script>
 
 <main>
@@ -434,12 +421,14 @@
                           <i class="fas fa-star text-secondary" />
                         </label>
                         <!--to be move (dont like currect position)-->
-                        <h3>Cart</h3>
-                        <p>Items: <span id="cartCount">0</span></p>
-                        <p>
-                          Selected Item Price: <span id="selectedPrice">0</span>
-                        </p>
-                        <p>Total Price: <span id="totalPrice">0</span></p>
+                        <div>
+                          <h3>Cart</h3>
+                          <p>Items: {$itemsInCart}</p>
+                          <p>Total Price: ${$totalCost.toFixed(2)}</p>
+                          <button id="checkoutButton" on:click={showPrompt}>Checkout</button>
+                          <!-- Add the DiscountCodeInput component below the Total Price -->
+                          <DiscountCodeInput {totalCost}/>
+                        </div>  
                       </div>
                     </div>
                   </div>
@@ -483,6 +472,75 @@
 
             <hr />
 
+            <div class="row justify-content-center mb-3">
+              <div class="col-md-12">
+                <div class="card shadow-0 border rounded-3">
+                  <div class="card-body">
+                    <div class="row g-0">
+                      <div
+                        class="col-xl-3 col-md-4 d-flex justify-content-center"
+                      >
+                        <div
+                          class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0"
+                        >
+                          <img
+                            src="/src/images/abhishek-hajare-kkrXVKK-jhg-unsplash.jpg"
+                            class="w-100"
+                          />
+                          <a href="#!">
+                            <div class="hover-overlay">
+                              <div
+                                class="mask"
+                                style="background-color: rgba(253, 253, 253, 0.15);"
+                              />
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-xl-6 col-md-5 col-sm-7">
+                        <h5>T-shirt for Men Blue Cotton Base</h5>
+                        <div class="d-flex flex-row">
+                          <div class="text-warning mb-1 me-2">
+                            <i class="fa fa-star" />
+                            <i class="fa fa-star" />
+                            <i class="fa fa-star" />
+                            <i class="fa fa-star" />
+                            <i class="fas fa-star-half-alt" />
+                            <span class="ms-1"> 4.5 </span>
+                          </div>
+                          <span class="text-muted">154 orders</span>
+                        </div>
+
+                        <p class="text mb-4 mb-md-0">
+                          Short description about the product goes here, for ex
+                          its features. Lorem ipsum dolor sit amet with hapti
+                          you enter into any new area of science, you almost
+                          lorem ipsum is great text
+                        </p>
+                      </div>
+                      <div class="col-xl-3 col-md-3 col-sm-5">
+                        <div class="d-flex flex-row align-items-center mb-1">
+                          <h4 class="mb-1 me-1">$99.50</h4>
+                          <span class="text-danger"><s>$190</s></span>
+                        </div>
+                        <h6 class="text-success">Free shipping</h6>
+                        <div class="mt-4">
+                          <button class="btn btn-primary shadow-0" type="button" id="buyButton" on:click={addToCart}
+                            >Buy this</button
+                          >
+                          <a
+                            href="#!"
+                            class="btn btn-light border px-2 pt-2 icon-hover"
+                            ><i class="fas fa-heart fa-lg px-1" /></a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Testing -->
             {#await productList}
               <p>...waiting</p>
@@ -499,7 +557,10 @@
                             <div
                               class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0"
                             >
-                            <img src="static/images/marina-unsplash.jpg" class="w-100" alt="coffee.png">
+                              <img
+                                src="src/images/marina-zaharkina-oWBTvKB8Ro8-unsplash.jpg"
+                                class="w-100"
+                              />
                               <a href="#!">
                                 <div class="hover-overlay">
                                   <div
@@ -532,15 +593,13 @@
                           </div>
                           <div class="col-xl-3 col-md-3 col-sm-5">
                             <div
-                              class="d-flex flex-row align-items-center mb-1"
-                            >
-                              <p>{item.current_retail_price}</p>
+                              class="d-flex flex-row align-items-center mb-1">
+                              <p id="currentPrice">{item.current_retail_price}</p>
                             </div>
                             <div class="mt-4">
                               <button
                                 class="btn btn-primary shadow-0"
-                                type="button">Buy this</button
-                              >
+                                type="button" id="buyButton" on:click={submitOrder}>Buy this</button>
                             </div>
                           </div>
                         </div>
@@ -595,36 +654,38 @@
             </nav> -->
             <!-- Pagination -->
             <!-- Add this element to display the prompt -->
-            <div id="CreditCard" class="card-prompt" style="display: none;">
+            <div id="CreditCard" class="card-prompt" style="display: none" >
               <h2>Enter Credit Card Information</h2>
-              <form>
+              <form class="form-horizontal" on:submit={handlePayment}>
                 <div class="form-group">
                   <label for="cardNumber">Card Number:</label>
-                  <input
-                    type="text"
-                    id="cardNumber"
-                    placeholder="Card Number"
-                  />
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="cardNumber" placeholder="Card Number" on:input={restrictToNumbers} required />
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="expiryDate">Expiry Date:</label>
-                  <input type="text" id="expiryDate" placeholder="MM/YYYY" />
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YYYY" on:input={restrictToNumbers} required />
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="cvv">CVV:</label>
-                  <input type="text" id="cvv" placeholder="CVV" />
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="CVV" on:input={restrictToNumbers} required />
+                  </div>
                 </div>
                 <button type="submit">Pay Now</button>
+                <button class="close-button" on:click={closePrompt}>Close</button>
               </form>
             </div>
-          </div>
-        </div>
-      </div>
+            <div id="loadingScreen" style="display: none;">
+              <!-- Placeholder for loading screen -->
+              Loading...
+            </div>            
     </section>
     <!-- <script src="pagination copy.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    </body
-  >
+    </body>
 </main>
 
 <style>
@@ -632,5 +693,16 @@
     color: darksalmon;
     border: 2px solid darksalmon;
     background-color: white;
+  }
+
+  .card-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid darksalmon;
+    padding: 60px;
+    background-color: lightgray;
+    width: 700px;
   }
 </style>
