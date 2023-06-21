@@ -21,6 +21,7 @@
   let selectedDonut = ""; // Declare and initialize selectedDonut variable
   let selectedCoffee = ""; // Declare and initialize selectedCoffee variable
 
+  let filterOn = false;
   let productList = loadData();
 
   // Load everything in the Products database
@@ -33,6 +34,25 @@
       return error;
     }
   }
+
+  async function filter(group) {
+    filterOn = true;
+    try {
+      const { data } = await supabase
+        .from("Products")
+        .select()
+        .match({ product_group: group });
+      data.forEach((item) => console.log(item.product));
+      return data;
+    } catch (error) {
+      console.error("Error fetching data from Supabase:", error);
+      return error;
+    }
+  }
+
+  // Checkbox
+  let smallYes = false;
+  let largeYes = false;
 
   // Update the total price when the selected coffee or donut changes
   async function updateTotalPrice() {
@@ -239,7 +259,7 @@
         aria-controls="offcanvasResponsive">Show Filters</button
       >
 
-      <div class="flex-shrink-0 p-3 d-none d-lg-block" style="width: 280px;">
+      <div class="flex-shrink-0 p-3 d-none d-lg-block" style="width: 240px;">
         <h3 class="fs-5 fw-semibold">Filters</h3>
       </div>
 
@@ -279,6 +299,7 @@
                     <a
                       href="#"
                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      on:click={() => (productList = filter("Coffee"))}
                       >Coffee</a
                     >
                   </li>
@@ -286,20 +307,21 @@
                     <a
                       href="#"
                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                      >Tea</a
+                      on:click={() => (productList = filter("Teas"))}>Tea</a
                     >
                   </li>
                   <li>
                     <a
                       href="#"
                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                      >Food</a
+                      on:click={() => (productList = filter("Food"))}>Food</a
                     >
                   </li>
                   <li>
                     <a
                       href="#"
                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      on:click={() => (productList = filter("Beverages"))}
                       >Beverages</a
                     >
                   </li>
@@ -321,17 +343,23 @@
                     <input
                       class="form-check-input me-1"
                       type="checkbox"
+                      bind:checked={smallYes}
                       value=""
                       id="smCheckbox"
                     />
-                    <label class="form-check-label" for="smCheckbox"
-                      >Small</label
-                    >
+                    {#if smallYes}
+                      <label class="form-check-label" for="smCheckbox"
+                        >Small</label
+                      >
+                    {:else}
+                      <label class="form-check-label" for="smCheckbox">☆</label>
+                    {/if}
                   </li>
                   <li class="list-group-item">
                     <input
                       class="form-check-input me-1"
                       type="checkbox"
+                      bind:checked={largeYes}
                       value=""
                       id="lgCheckbox"
                     />
