@@ -22,6 +22,10 @@
   const donutOptions = writable([]); // Declare and initialize donutOptions variable
   const orderStatus = writable("Pending");
   
+  let selectedDonut = ""; // Declare and initialize selectedDonut variable
+  let selectedCoffee = ""; // Declare and initialize selectedCoffee variable
+
+  let filterOn = false;
   let productList = loadData();
   
 
@@ -35,6 +39,25 @@
       return error;
     }
   }
+
+  async function filter(group) {
+    filterOn = true;
+    try {
+      const { data } = await supabase
+        .from("Products")
+        .select()
+        .match({ product_group: group });
+      data.forEach((item) => console.log(item.product));
+      return data;
+    } catch (error) {
+      console.error("Error fetching data from Supabase:", error);
+      return error;
+    }
+  }
+
+  // Checkbox
+  let smallYes = false;
+  let largeYes = false;
 
   // Update the total price when the selected coffee or donut changes
   function updateOrderStatus(status) {
@@ -149,404 +172,270 @@
     });
 </script>
 
-<main>
   <head>
     <!-- basic -->
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- mobile metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
     <!-- site metas -->
-    <title>Events</title>
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+  <title>Store</title>
+
     <!-- bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="src/css/bootstrap.min.css" />
-    <!-- style css -->
-    <link rel="stylesheet" type="text/css" href="src/css/style.css" />
-    <!-- Responsive-->
-    <link rel="stylesheet" href="src/css/responsive.css" />
-    <!-- fevicon -->
-    <link rel="icon" href="src/images/fevicon.png" type="image/gif" />
-    <!-- font css -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous"
     />
-    <!-- Scrollbar Custom CSS -->
-    <link rel="stylesheet" href="src/css/jquery.mCustomScrollbar.min.css" />
-    <!-- Tweaks for older IEs-->
-    <link
-      rel="stylesheet"
-      href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
-    />
+  <link rel="stylesheet" href="./src/css/sidebars.css" />
   </head>
 
   <body>
-    <div class="header_section header_bg">
+  <!-- Top Nav -->
+  <section>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="home.html"
-            ><img src="src/images/favicon.ico" /></a
-          >
-          <p class="logo_text">Ame de cafe Express</p>
+        <a class="navbar-brand" href="#">
+          <img
+            src="src/images/favicon.ico"
+            alt="Logo"
+            width="30"
+            height="24"
+            class="d-inline-block align-text-top"
+          />
+          Ame de cafe Express
+        </a>
           <button
             class="navbar-toggler"
             type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarText"
+          aria-controls="navbarText"
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
             <span class="navbar-toggler-icon" />
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="./home.html">Home</a>
+              <a class="nav-link active" aria-current="page" href="./home.html"
+                >Home</a
+              >
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="./shop.html">Shop</a>
               </li>
-              <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="./events.html">Events</a>
               </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-              <div class="login_bt">
-                <ul>
-                  <li>
-                    <a href="#"
-                      ><span class="user_icon"
-                        ><i class="fa fa-user" aria-hidden="true" /></span
-                      >Login</a
-                    >
-                  </li>
-                </ul>
+          <span class="navbar-text"> Login </span>
               </div>
-            </form>
           </div>
         </nav>
-      </div>
-    </div>
-    <section class="">
-      <div class="container">
-        <div class="row">
-          <!-- sidebar -->
-          <div class="col-lg-3">
-            <!-- Toggle button -->
+  </section>
+
+  <div class="d-flex flex-column flex-lg-row">
+    <!-- Side Bar -->
+    <section class="p-2">
             <button
-              class="btn btn-outline-secondary mb-3 w-100 d-lg-none"
+        class="btn btn-primary d-lg-none"
               type="button"
-              data-mdb-toggle="collapse"
-              data-mdb-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasResponsive"
+        aria-controls="offcanvasResponsive">Show Filters</button
             >
-              <span>Show filter</span>
-            </button>
-            <!-- Collapsible wrapper -->
+
+      <div class="flex-shrink-0 p-3 d-none d-lg-block" style="width: 240px;">
+        <h3 class="fs-5 fw-semibold">Filters</h3>
+      </div>
+
+      <!-- Offcanvas -->
             <div
-              class="collapse card d-lg-block mb-5"
-              id="navbarSupportedContent"
+        class="offcanvas-lg offcanvas-start"
+        tabindex="-1"
+        id="offcanvasResponsive"
+        aria-labelledby="offcanvasResponsiveLabel"
             >
-              <div class="accordion" id="accordionPanelsStayOpenExample">
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingOne">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Filters</h5>
                     <button
-                      class="accordion-button text-dark bg-light"
                       type="button"
-                      data-mdb-toggle="collapse"
-                      data-mdb-target="#panelsStayOpen-collapseOne"
-                      aria-expanded="true"
-                      aria-controls="panelsStayOpen-collapseOne"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            data-bs-target="#offcanvasResponsive"
+            aria-label="Close"
+          />
+        </div>
+
+        <!-- Body -->
+        <div class="offcanvas-body">
+          <ul class="list-unstyled ps-0">
+            <li class="mb-1">
+              <button
+                class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#home-collapse"
+                aria-expanded="false"
                     >
                       Menu
                     </button>
-                  </h2>
-                  <div
-                    id="panelsStayOpen-collapseOne"
-                    class="accordion-collapse collapse show"
-                    aria-labelledby="headingOne"
+              <div class="collapse" id="home-collapse" style="">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      on:click={() => (productList = filter("Coffee"))}
+                      >Coffee</a
                   >
-                    <div class="accordion-body">
-                      <ul class="list-unstyled">
-                        <li><a href="#" class="text-dark">Food </a></li>
-                        <li><a href="#" class="text-dark">Tea </a></li>
-                        <li><a href="#" class="text-dark">Coffee </a></li>
-                        <li><a href="#" class="text-dark">Beverages </a></li>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      on:click={() => (productList = filter("Teas"))}>Tea</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      on:click={() => (productList = filter("Food"))}>Food</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      on:click={() => (productList = filter("Beverages"))}
+                      >Beverages</a
+                    >
+                  </li>
                       </ul>
                     </div>
-                  </div>
-                </div>
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingThree">
+            </li>
+            <li class="mb-1">
                     <button
-                      class="accordion-button text-dark bg-light"
-                      type="button"
-                      data-mdb-toggle="collapse"
-                      data-mdb-target="#panelsStayOpen-collapseThree"
+                class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#dashboard-collapse"
                       aria-expanded="false"
-                      aria-controls="panelsStayOpen-collapseThree"
                     >
-                      Size
+                Sizes
                     </button>
-                  </h2>
-                  <div
-                    id="panelsStayOpen-collapseFour"
-                    class="accordion-collapse collapse show"
-                    aria-labelledby="headingThree"
-                  >
-                    <div class="accordion-body">
+              <div class="collapse" id="dashboard-collapse">
+                <ul class="list-group small">
+                  <li class="list-group-item">
                       <input
+                      class="form-check-input me-1"
                         type="checkbox"
-                        class="btn-check border justify-content-center"
-                        id="btn-check2"
-                        checked
-                        autocomplete="off"
+                      bind:checked={smallYes}
+                      value=""
+                      id="smCheckbox"
                       />
-                      <label
-                        class="btn btn-white mb-1 px-1"
-                        style="width: 60px;"
-                        for="btn-check2">SM</label
+                      <label class="form-check-label" for="smCheckbox"
+                        >Small</label
                       >
+                  </li>
+                  <li class="list-group-item">
                       <input
+                      class="form-check-input me-1"
                         type="checkbox"
-                        class="btn-check border justify-content-center"
-                        id="btn-check3"
-                        checked
-                        autocomplete="off"
+                      bind:checked={largeYes}
+                      value=""
+                      id="lgCheckbox"
                       />
-                      <label
-                        class="btn btn-white mb-1 px-1"
-                        style="width: 60px;"
-                        for="btn-check3">LG</label
+                    <label class="form-check-label" for="lgCheckbox"
+                      >Large</label
                       >
+                  </li>
+                </ul>
                     </div>
-                  </div>
-                </div>
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingThree">
+            </li>
+            <li class="mb-1">
                     <button
-                      class="accordion-button text-dark bg-light"
-                      type="button"
-                      data-mdb-toggle="collapse"
-                      data-mdb-target="#panelsStayOpen-collapseFive"
+                class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#orders-collapse"
                       aria-expanded="false"
-                      aria-controls="panelsStayOpen-collapseFive"
                     >
-                      Ratings
+                Orders
                     </button>
-                  </h2>
-                  <div
-                    id="panelsStayOpen-collapseFive"
-                    class="accordion-collapse collapse show"
-                    aria-labelledby="headingThree"
+              <div class="collapse" id="orders-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >New</a
                   >
-                    <div class="accordion-body">
-                      <!-- Default checkbox -->
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                          checked
-                        />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          <i class="fas fa-star text-warning" /><i
-                            class="fas fa-star text-warning"
-                          /><i class="fas fa-star text-warning" /><i
-                            class="fas fa-star text-warning"
-                          />
-                          <i class="fas fa-star text-warning" />
-                        </label>
-                      </div>
-                      <!-- Default checkbox -->
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                          checked
-                        />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          <i class="fas fa-star text-warning" /><i
-                            class="fas fa-star text-warning"
-                          /><i class="fas fa-star text-warning" /><i
-                            class="fas fa-star text-warning"
-                          />
-                          <i class="fas fa-star text-secondary" />
-                        </label>
-                      </div>
-                      <!-- Default checkbox -->
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                          checked
-                        />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          <i class="fas fa-star text-warning" /><i
-                            class="fas fa-star text-warning"
-                          /><i class="fas fa-star text-warning" /><i
-                            class="fas fa-star text-secondary"
-                          />
-                          <i class="fas fa-star text-secondary" />
-                        </label>
-                      </div>
-                      <!-- Default checkbox -->
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                          checked
-                        />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          <i class="fas fa-star text-warning" /><i
-                            class="fas fa-star text-warning"
-                          /><i class="fas fa-star text-secondary" /><i
-                            class="fas fa-star text-secondary"
-                          />
-                          <i class="fas fa-star text-secondary" />
-                        </label>
-                        <!--to be move (dont like currect position)-->
-                        <div>
-                          <h3>Cart</h3>
-                          <p>Items: {$itemsInCart}</p>
-                          <p>Total Price: ${$totalCost.toFixed(2)}</p>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >Processed</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                      >Shipped</a
+            >
+                  </li>
+                </ul>
+                </div>
+            </li>
+            <li class="border-top my-3" />
+            <li class="mb-1">
+              <button
+                class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#account-collapse"
+                aria-expanded="false"
+                      >
+                Cart
+              </button>
+              <div class="collapse" id="account-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li
+                    class="link-dark d-inline-flex text-decoration-none rounded"
+                        >
+                    <a
+                      href="#"
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      >Items: {$itemsInCart}</a>                       
+                  </li>
+                  <li>
+                          <a
+                      href="#"
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                          >
+                      <p>Total Price: ${$totalCost.toFixed(2)}</p>
                           <button id="checkoutButton" on:click={showPrompt}>Checkout</button>
                           <!-- Add the DiscountCodeInput component below the Total Price -->
                           <DiscountCodeInput {totalCost}/>
-                        </div>  
-                      </div>
-                    </div>
-                  </div>
+                  </li>
+                </ul>
                 </div>
+            </li>
+          </ul>
               </div>
             </div>
-          </div>
-          <!-- sidebar -->
+    </section>
 
-          <!-- Sidebar test -->
-          
-
-          <!-- content -->
-
-          <div class="col-lg-9">
-            <header
-              class="d-sm-flex align-items-center border-bottom mb-4 pb-3"
-            >
-              <strong class="d-block py-2">32 Items found </strong>
-              <div class="ms-auto">
-                <select class="form-select d-inline-block w-auto border pt-1">
-                  <option value="0">Best match</option>
-                  <option value="1">Recommended</option>
-                  <option value="2">High rated</option>
-                  <option value="3">Randomly</option>
-                </select>
-                <div class="btn-group shadow-0 border">
-                  <a href="#" class="btn btn-light" title="List view">
-                    <i class="fa fa-bars fa-lg" />
-                  </a>
-                  <a href="#" class="btn btn-light active" title="Grid view">
-                    <i class="fa fa-th fa-lg" />
-                  </a>
-                </div>
-              </div>
-            </header>
-
-            <!-- Card List -->
-
-            <!-- Card List -->
-
-            <hr />
-
-            <div class="row justify-content-center mb-3">
-              <div class="col-md-12">
-                <div class="card shadow-0 border rounded-3">
-                  <div class="card-body">
-                    <div class="row g-0">
-                      <div
-                        class="col-xl-3 col-md-4 d-flex justify-content-center"
-                      >
-                        <div
-                          class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0"
-                        >
-                          <img
-                            src="/src/images/abhishek-hajare-kkrXVKK-jhg-unsplash.jpg"
-                            class="w-100"
-                          />
-                          <a href="#!">
-                            <div class="hover-overlay">
-                              <div
-                                class="mask"
-                                style="background-color: rgba(253, 253, 253, 0.15);"
-                              />
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                      <div class="col-xl-6 col-md-5 col-sm-7">
-                        <h5>T-shirt for Men Blue Cotton Base</h5>
-                        <div class="d-flex flex-row">
-                          <div class="text-warning mb-1 me-2">
-                            <i class="fa fa-star" />
-                            <i class="fa fa-star" />
-                            <i class="fa fa-star" />
-                            <i class="fa fa-star" />
-                            <i class="fas fa-star-half-alt" />
-                            <span class="ms-1"> 4.5 </span>
-                          </div>
-                          <span class="text-muted">154 orders</span>
-                        </div>
-
-                        <p class="text mb-4 mb-md-0">
-                          Short description about the product goes here, for ex
-                          its features. Lorem ipsum dolor sit amet with hapti
-                          you enter into any new area of science, you almost
-                          lorem ipsum is great text
-                        </p>
-                      </div>
-                      <div class="col-xl-3 col-md-3 col-sm-5">
-                        <div class="d-flex flex-row align-items-center mb-1">
-                          <h4 class="mb-1 me-1">$99.50</h4>
-                          <span class="text-danger"><s>$190</s></span>
-                        </div>
-                        <h6 class="text-success">Free shipping</h6>
-                        <div class="mt-4">
-                          <button class="btn btn-primary shadow-0" type="button" id="buyButton" on:click={addToCart}
-                            >Buy this</button
-                          >
-                          <a
-                            href="#!"
-                            class="btn btn-light border px-2 pt-2 icon-hover"
-                            ><i class="fas fa-heart fa-lg px-1" /></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Testing -->
+    <!-- Content -->
+    <section class="p-2 flex-fill">
             {#await productList}
               <p>...waiting</p>
             {:then data}
               {#each data as item}
-                <div class="row justify-content-center mb-3" id="paginated-list">
+          <div class="row justify-content-center mb-3">
                   <div class="col-md-12">
                     <div class="card shadow-0 border rounded-3">
                       <div class="card-body">
@@ -558,8 +447,9 @@
                               class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0"
                             >
                               <img
-                                src="src/images/marina-zaharkina-oWBTvKB8Ro8-unsplash.jpg"
-                                class="w-100"
+                          src="./static/images/{item.product_group}.jpg"
+                          class="w-100 h-100 img-fluid rounded"
+                          alt="{item.product_group}.png"
                               />
                               <a href="#!">
                                 <div class="hover-overlay">
@@ -583,7 +473,6 @@
                                 <i class="fas fa-star-half-alt" />
                                 <span class="ms-1"> 4.5 </span>
                                 <br />
-                                <span class="text-muted">154 orders</span>
                               </div>
                             </div>
 
@@ -591,15 +480,12 @@
                               {item.product_description}
                             </p>
                           </div>
-                          <div class="col-xl-3 col-md-3 col-sm-5">
-                            <div
-                              class="d-flex flex-row align-items-center mb-1">
-                              <p id="currentPrice">{item.current_retail_price}</p>
+                    <div class="col-xl-2 col-md-3 col-sm-5">
+                      <div class="d-flex flex-row align-items-center mb-1">
+                        <p id="currentPrice">{item.current_retail_price}</p>
                             </div>
                             <div class="mt-4">
-                              <button
-                                class="btn btn-primary shadow-0"
-                                type="button" id="buyButton" on:click={submitOrder}>Buy this</button>
+                        <button class="btn btn-primary shadow-0" type="button" id="buyButton"on:click={submitOrder}>Buy this</button>
                             </div>
                           </div>
                         </div>
@@ -611,49 +497,7 @@
             {:catch error}
               <p style="color: red">{error.message}</p>
             {/await}
-
-            <hr />
-
-            <!-- Pagination -->
-            <nav class="pagination-container">
-              <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">
-                &lt;
-              </button>
-              
-              <div id="pagination-numbers">
-              </div>
-              
-              <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">
-                &gt;
-              </button>
-            </nav>
-<!-- 
-            <nav
-              aria-label="Page navigation example"
-              class="d-flex justify-content-center mt-3"
-            >
-              <ul class="pagination">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item active">
-                  <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav> -->
-            <!-- Pagination -->
-            <!-- Add this element to display the prompt -->
+                <!-- Add this element to display the prompt -->
             <div id="CreditCard" class="card-prompt" style="display: none" >
               <h2>Enter Credit Card Information</h2>
               <form class="form-horizontal" on:submit={handlePayment}>
@@ -684,9 +528,16 @@
               Loading...
             </div>            
     </section>
-    <!-- <script src="pagination copy.js"></script> -->
+            <hr />
+              </div>
+              
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"
+  ></script>
     </body>
-</main>
+    
 
 <style>
   button {
