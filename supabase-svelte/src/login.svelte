@@ -14,6 +14,7 @@
   let email = "";
   let loginMessage = "";
   let password = "";
+  let loggedInUser = null;
 
   const login = async (event) => {
     event.preventDefault(); // Prevent the default form submission
@@ -28,11 +29,12 @@
         loginMessage = `Login failed: ${error.message}`;
         console.error(error);
       } else if (data) {
+        const { email } = data; // Extract the email from the data object
         loginMessage = 'Login successful!';
         console.log('User:', data);
-
-        // Redirect to the home page
-        window.location.href = '/home.html';
+        loggedInUser = { email, ...data }; // Store the logged-in user with their email
+        window.location.href = '/home.html'; // Redirect to the home page
+          
       }
     } catch (error) {
       loginMessage = `Login failed: ${error.message}`;
