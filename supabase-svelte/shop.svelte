@@ -18,12 +18,7 @@
 
   const supabase = createClient(url, anonKey);
 
-  const coffeeOptions = writable([]); // Declare and initialize coffeeOptions variable
-  const donutOptions = writable([]); // Declare and initialize donutOptions variable
   const orderStatus = writable("Pending");
-
-  let selectedDonut = ""; // Declare and initialize selectedDonut variable
-  let selectedCoffee = ""; // Declare and initialize selectedCoffee variable
 
   let filterOn = false;
   let productList = loadData();
@@ -148,72 +143,7 @@
   });
 </script>
 
-<head>
-  <!-- basic -->
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- mobile metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
-  <!-- site metas -->
-  <title>Store</title>
-
-  <!-- bootstrap css -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-    crossorigin="anonymous"
-  />
-  <link rel="stylesheet" href="./src/css/sidebars.css" />
-</head>
-
-<body>
-  <!-- Top Nav -->
-  <section>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <img
-            src="src/images/favicon.ico"
-            alt="Logo"
-            width="30"
-            height="24"
-            class="d-inline-block align-text-top"
-          />
-          Ame de cafe Express
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon" />
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./home.html"
-                >Home</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./shop.html">Shop</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./events.html">Events</a>
-            </li>
-          </ul>
-          <span class="navbar-text"> Login </span>
-        </div>
-      </div>
-    </nav>
-  </section>
-
+<main>
   <div class="d-flex flex-column flex-lg-row">
     <!-- Side Bar -->
     <section class="p-2">
@@ -560,13 +490,7 @@
       </div>
     </section>
   </div>
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-    crossorigin="anonymous"
-  ></script>
-</body>
+</main>
 
 <style>
   button {
