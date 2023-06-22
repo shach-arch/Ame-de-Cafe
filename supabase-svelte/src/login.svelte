@@ -15,29 +15,30 @@
   let loginMessage = "";
   let password = "";
 
-  async function login() {
+  const login = async (event) => {
+    event.preventDefault(); // Prevent the default form submission
+
     try {
-      // Attempt to sign in with email and password
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password,
+        password
       });
+
       if (error) {
-        // If there is an error, display a login failure message
         loginMessage = `Login failed: ${error.message}`;
         console.error(error);
       } else if (data) {
-        // If login is successful, display a login success message
-        loginMessage = "Login successful!";
-        console.log("User:", data);
-        window.location.href = "home.html"; // Redirect to the home page
+        loginMessage = 'Login successful!';
+        console.log('User:', data);
+
+        // Redirect to the home page
+        window.location.href = '/home.html';
       }
     } catch (error) {
-      // Catch any errors that occur during the login process
       loginMessage = `Login failed: ${error.message}`;
       console.error(error);
     }
-  }
+  };
 </script>
 <main>
 <head>
@@ -99,21 +100,22 @@
                 <h5 class="tasty_text">Tasty Of Ame de cafe Express</h5>
                 <div class="btn_main">
                   <div class="about_bt">
-                    <form on:submit={login}>
+                    <form on:submit="{login}">
                       <div class="mb-3">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" bind:value={email}>
+                        <input type="email" id="email" bind:value="{email}">
                       </div>
                       <div class="mb-3">
                         <label for="password">Password:</label>
-                        <input type="password" id="password" bind:value={password}>
+                        <input type="password" id="password" bind:value="{password}">
                       </div>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <button type="submit" class="btn btn-primary">Sign Up</button>
-                        <button type="button" class="btn btn-primary" onclick="window.location.href = 'home.html'">login</button>
-                      </div>
+                      <button type="submit" class="btn btn-primary">Login</button>
+                      <button type="button" class="btn btn-primary" onclick="window.location.href = 'signup.html'">Sign Up</button>
                     </form>
                     
+                    {#if loginMessage}
+                      <p>{loginMessage}</p>
+                    {/if}
                   </div>
                 </div>
               </div>
