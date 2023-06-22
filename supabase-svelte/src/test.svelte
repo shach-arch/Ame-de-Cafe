@@ -108,7 +108,7 @@
                             <div class="d-flex flex-row align-items-center">
                               <div>
                                 <img
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp"
+                                  src="../static/images/{item.product_group}.jpg"
                                   class="img-fluid rounded-3"
                                   alt="Shopping item"
                                   style="width: 65px;"
@@ -265,7 +265,7 @@
 
 <style>
   .scroll {
-    height:  57.5rem;
+    height: 57.5rem;
     overflow-y: scroll;
   }
 

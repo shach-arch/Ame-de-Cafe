@@ -21,7 +21,7 @@
   <style>
     html {
       height: 67.5rem;
-      overflow-y: hidden;
+      overflow-y: none;
     }
   </style>
   <body>
@@ -35,8 +35,8 @@
       crossorigin="anonymous"></script>
   </body>
   <script type="module">
-    import Shop from "./shop.svelte";
     import Header from "./src/Header.svelte";
+    import Shop from "./src/shop.svelte";
 
     const header = new Header({
       target: document.getElementById("header"),

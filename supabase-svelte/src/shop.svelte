@@ -2,10 +2,13 @@
   import { createClient } from "@supabase/supabase-js";
   import { afterUpdate, onMount } from "svelte";
   import { writable, derived } from "svelte/store";
-  import DiscountCodeInput from "./DiscountCodeInput.svelte";
+  import DiscountCodeInput from "../DiscountCodeInput.svelte";
   export const itemsInCart = writable(0);
   export const totalCost = writable(0);
 
+  // Checkbox
+  let smallYes = false;
+  let largeYes = false;
 
   const url = "https://ujnattukwsqsjmzuhyoh.supabase.co";
   const anonKey =
@@ -36,17 +39,13 @@
         .from("Products")
         .select()
         .match({ product_group: group });
-      data.forEach((item) => console.log("HI_ "+item.product));
+      data.forEach((item) => console.log("HI_ " + item.product));
       return data;
     } catch (error) {
       console.error("Error fetching data from Supabase:", error);
       return error;
     }
   }
-
-  // Checkbox
-  let smallYes = false;
-  let largeYes = false;
 
   // Update the total price when the selected coffee or donut changes
   function updateOrderStatus(status) {
@@ -56,7 +55,7 @@
   function addToCart() {
     itemsInCart.update((items) => items + 1);
   }
- 
+
   function updateTotalPrice() {
     const priceElement = document.getElementById("currentPrice");
     const priceValue = priceElement.innerHTML;
@@ -77,7 +76,6 @@
 
   function submitOrder(item) {
     cartList.push(item);
-    console.log(cartList);
 
     // Order submitted
     updateOrderStatus("Submitted");
@@ -438,7 +436,7 @@
     <hr />
 
     <!-- Add this element to display the prompt -->
-    <section>
+    <!-- <section>
       <div id="CreditCard" class="card-prompt" style="display: none">
         <h2>Enter Credit Card Information</h2>
         <form class="form-horizontal" on:submit={handlePayment}>
@@ -487,11 +485,12 @@
           <button class="close-button" on:click={closePrompt}>Close</button>
         </form>
       </div>
-    </section>
+    </section> -->
   </div>
 </main>
 
 <style>
+
   button {
     color: darksalmon;
     border: 2px solid darksalmon;

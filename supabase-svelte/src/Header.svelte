@@ -1,6 +1,5 @@
-<!-- Top Nav -->
 <section>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary header_bg header_section">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary header_bg">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         <img
@@ -46,7 +45,7 @@
 <style>
   .header_bg {
     width: 100%;
-    float: left;
+    /* float: left; */
     background-image: url(../static/images/header-bg.png);
     height: auto;
     background-size: cover;
