@@ -3,23 +3,20 @@
   import { afterUpdate, onMount } from "svelte";
   import { writable, derived } from "svelte/store";
   import DiscountCodeInput from "./DiscountCodeInput.svelte";
-  // import { getStores, navigating, page, updated } from '$app/stores';
-  // import { Pagination } from 'flowbite-svelte'
   export const itemsInCart = writable(0);
   export const totalCost = writable(0);
 
 
   const url = "https://ujnattukwsqsjmzuhyoh.supabase.co";
-
   const anonKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqbmF0dHVrd3Nxc2ptenVoeW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU1OTUyMDgsImV4cCI6MjAwMTE3MTIwOH0.G9dIZVpPY5ylDQD63YRjGFGuP3LGtECuQndt8OdxtZM";
-
   const supabase = createClient(url, anonKey);
 
   const orderStatus = writable("Pending");
 
   let filterOn = false;
   let productList = loadData();
+  let cartList = [];
 
   // Load everything in the Products database
   async function loadData() {
@@ -39,7 +36,7 @@
         .from("Products")
         .select()
         .match({ product_group: group });
-      data.forEach((item) => console.log(item.product));
+      data.forEach((item) => console.log("HI_ "+item.product));
       return data;
     } catch (error) {
       console.error("Error fetching data from Supabase:", error);
@@ -78,7 +75,10 @@
     }
   }
 
-  function submitOrder() {
+  function submitOrder(item) {
+    cartList.push(item);
+    console.log(cartList);
+
     // Order submitted
     updateOrderStatus("Submitted");
     // Handle submitting the order
@@ -103,8 +103,8 @@
   let showCreditCardPrompt = false;
   let creditCardPromptElement;
   function showPrompt() {
-    const prompt = document.getElementById("CreditCard");
-    prompt.style.display = "block";
+    sessionStorage.setItem("jsArray", JSON.stringify(cartList));
+    window.location.replace("cart.html");
   }
   function closePrompt() {
     const prompt = document.getElementById("CreditCard");
@@ -416,7 +416,7 @@
                           class="btn btn-primary shadow-0"
                           type="button"
                           id="buyButton"
-                          on:click={submitOrder}>Buy this</button
+                          on:click={() => submitOrder(item)}>Buy this</button
                         >
                       </div>
                     </div>
@@ -496,6 +496,11 @@
     color: darksalmon;
     border: 2px solid darksalmon;
     background-color: white;
+  }
+
+  button:hover {
+    background-color: darksalmon;
+    transition: 0.7s;
   }
 
   .scroll {
