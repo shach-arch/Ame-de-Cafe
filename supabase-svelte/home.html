@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
    <head>
       <!-- basic -->
@@ -27,8 +28,9 @@
       <link rel="stylesheet" href="src/css/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      
    </head>
-   <body>
+   <body> 
       <div class="header_section">
          <div class="container-fluid">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -53,11 +55,25 @@
                   <form class="form-inline my-2 my-lg-0">
                      <div class="login_bt">
                         <ul>
-                           <li><a href="#"><span class="user_icon"><i class="fa fa-user" aria-hidden="true"></i></span>Login</a></li>
-                           <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                           <li><p id="welcomeMessage"></p></li>
                         </ul>
                      </div>
                   </form>
+                  <script>
+                     // Wait for the DOM to fully load
+                     document.addEventListener("DOMContentLoaded", function() {
+                       // Retrieve the logged-in user's information from localStorage
+                       const loggedInUser = localStorage.getItem('loggedInUser');
+                       if (loggedInUser) {
+                         const user = JSON.parse(loggedInUser);
+                         // Use the user's information as needed
+                         console.log('Logged in user:', user);
+                         // Display the user's email on the page
+                         const welcomeMessage = document.getElementById('welcomeMessage');
+                         welcomeMessage.textContent = `Welcome, ${user.email}!`;
+                       }
+                     });
+                   </script>
                </div>
             </nav>
          </div>
@@ -427,6 +443,6 @@
       <script src="src/js/plugin.js"></script>
       <!-- sidebar -->
       <script src="src/js/jquery.mCustomScrollbar.concat.min.js"></script>
-      <script src="src/js/custom.js"></script>
+      <script src="src/js/custom.js"></script>         
    </body>
 </html>
