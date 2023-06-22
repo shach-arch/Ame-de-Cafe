@@ -3,6 +3,7 @@
   import { afterUpdate,onMount } from "svelte";
   import { writable, derived  } from "svelte/store";
   import DiscountCodeInput from './DiscountCodeInput.svelte';
+  import OrderTracker from "./OrderTracker.svelte";
   // import { getStores, navigating, page, updated } from '$app/stores';
   // import { Pagination } from 'flowbite-svelte'
   export const itemsInCart = writable(0);
@@ -10,7 +11,7 @@
   export const discountAmount = writable(0);
   export const isCodeValid = false;
   export const applyDiscountCode = writable([]);
-
+  
   const url = "https://ujnattukwsqsjmzuhyoh.supabase.co";
 
   const anonKey =
@@ -22,9 +23,6 @@
   const donutOptions = writable([]); // Declare and initialize donutOptions variable
   const orderStatus = writable("Pending");
   
-  let selectedDonut = ""; // Declare and initialize selectedDonut variable
-  let selectedCoffee = ""; // Declare and initialize selectedCoffee variable
-
   let filterOn = false;
   let productList = loadData();
   
@@ -117,21 +115,48 @@
     const prompt = document.getElementById("CreditCard")
     prompt.style.display = "none";
   }
+  function generateRandomId() {
+  var randomNumber = Math.floor(Math.random() * 1000000); // Generates a random number between 0 and 999999
+  var paddedNumber = String(randomNumber).padStart(6, '0'); // Pads the number with leading zeros to ensure it has 6 digits
+  var randomId = paddedNumber; // Prefixes the number with 'ID'
+  return randomId;
+}
+function handlePayment(event) {
+  event.preventDefault();
+  const cardNumberInput = document.getElementById('cardNumber');
+  const cardNumber = cardNumberInput instanceof HTMLInputElement ? cardNumberInput.value : '';
+  
+  const expiryDateInput = document.getElementById('expiryDate');
+  const expiryDate = expiryDateInput instanceof HTMLInputElement ? expiryDateInput.value : '';
+  
+  const cvvInput = document.getElementById('cvv');
+  const cvv = cvvInput instanceof HTMLInputElement ? cvvInput.value : '';
 
-  function handlePayment(event) {
-    event.preventDefault();
-    const cardNumber = event.target.elements.cardNumber.value;
-    const expiryDate = event.target.elements.expiryDate.value;
-    const cvv = event.target.elements.cvv.value;
-    // Perform payment processing or API call with the provided credit card information
-    console.log("Card Number:", cardNumber);
-    console.log("Expiry Date:", expiryDate);
-    console.log("CVV:", cvv);
+  // Perform payment processing or API call with the provided credit card information
+  console.log("Card Number:", cardNumber);
+  console.log("Expiry Date:", expiryDate);
+  console.log("CVV:", cvv);
 
-    // Reset the form and hide the credit card prompt
-    event.target.reset();
-    showCreditCardPrompt = false;
+  // Reset the form and hide the credit card prompt
+  const form = event.target.closest('form');
+  if (form) {
+    form.reset();
   }
+  showCreditCardPrompt = false;
+
+  // Generate a random ID
+  var id = generateRandomId();
+  console.log(id);
+  // Assuming orderStatus is defined and holds the order status value
+  supabase
+    .from('Orders')
+    .insert({ order_id: id, credit_card: cardNumber, status:"pending" })
+    .then(response => {
+      console.log('Order inserted successfully:', response);
+    })
+}
+
+
   function restrictToNumbers(event) {
     const input = event.target;
     const inputValue = input.value;
@@ -170,6 +195,7 @@
       const donutProducts = data.map((item) => item.product);
       donutOptions.set(donutProducts);
     });
+   
 </script>
 
   <head>
@@ -371,23 +397,9 @@
                     <a
                       href="#"
                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                      >New</a
-                  >
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                      >Processed</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                      >Shipped</a
-            >
-                  </li>
+                      >Track</a>
+                      <OrderTracker/>
+                  </li>  
                 </ul>
                 </div>
             </li>
@@ -498,35 +510,35 @@
               <p style="color: red">{error.message}</p>
             {/await}
                 <!-- Add this element to display the prompt -->
-            <div id="CreditCard" class="card-prompt" style="display: none" >
-              <h2>Enter Credit Card Information</h2>
-              <form class="form-horizontal" on:submit={handlePayment}>
-                <div class="form-group">
-                  <label for="cardNumber">Card Number:</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="cardNumber" placeholder="Card Number" on:input={restrictToNumbers} required />
-                  </div>
+                <div id="CreditCard" class="card-prompt" style="display: none">
+                  <h2>Enter Credit Card Information</h2>
+                  <form class="form-horizontal">
+                    <div class="form-group">
+                      <label for="cardNumber">Card Number:</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="cardNumber" placeholder="Card Number" on:input={restrictToNumbers} required />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="expiryDate">Expiry Date:</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YYYY" on:input={restrictToNumbers} required />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="cvv">CVV:</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="cvv" name="cvv" placeholder="CVV" on:input={restrictToNumbers} required />
+                      </div>
+                    </div>
+                    <button type="submit" on:click|preventDefault={handlePayment}>Pay Now</button>
+                    <button class="close-button" on:click={closePrompt}>Close</button>
+                  </form>
                 </div>
-                <div class="form-group">
-                  <label for="expiryDate">Expiry Date:</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YYYY" on:input={restrictToNumbers} required />
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="cvv">CVV:</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="CVV" on:input={restrictToNumbers} required />
-                  </div>
-                </div>
-                <button type="submit">Pay Now</button>
-                <button class="close-button" on:click={closePrompt}>Close</button>
-              </form>
-            </div>
-            <div id="loadingScreen" style="display: none;">
-              <!-- Placeholder for loading screen -->
-              Loading...
-            </div>            
+                <div id="loadingScreen" style="display: none;">
+                  <!-- Placeholder for loading screen -->
+                  Loading...
+                </div>                 
     </section>
             <hr />
               </div>
