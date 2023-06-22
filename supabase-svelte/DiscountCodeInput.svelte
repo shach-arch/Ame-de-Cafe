@@ -3,11 +3,10 @@
   import { writable } from 'svelte/store';
 
   export let totalCost;
-  export const total = writable(totalCost || 0); // Initialize with a default value of 0
+  export const isCodeValid = writable(false);
+  export const discountAmount = writable(0);
 
   let discountCode = '';
-  let isCodeValid = false;
-  let discountAmount = 0;
 
   const discountCodes = {
     CODE1: 0.1, // 10% discount
@@ -15,34 +14,36 @@
     SALE50: 0.5, // 50% discount
   };
 
-  function applyDiscountCode(discountCode) {
+  function applyDiscountCode() {
     const enteredCode = discountCode.trim().toUpperCase();
-    const discountAmount = discountCodes[enteredCode];
+    const discount = discountCodes[enteredCode];
 
-    if (discountAmount) {
+    if (discount) {
       // Code is valid
-      isCodeValid = true;
-      total.update(currentTotal => {
-        const discountedTotal = currentTotal - currentTotal * discountAmount;
-        console.log("Discount applied:", discountAmount * 100 + "%");
-        console.log("Cost after discount:", discountedTotal);
-        return discountedTotal;
-      });
+      isCodeValid.set(true);
+      discountAmount.set(discount);
+      const updatedTotal = calculateDiscountedTotal(discount);
+      totalCost.set(updatedTotal);
     } else {
       // Code is invalid
-      isCodeValid = false;
-      console.log("Invalid discount code:", discountCode);
+      isCodeValid.set(false);
+      discountAmount.set(0);
     }
+  }
+
+  function calculateDiscountedTotal(discount) {
+    const currentTotal = $totalCost;
+    const discountedTotal = currentTotal - currentTotal * discount;
+    return discountedTotal;
   }
 </script>
 
 <div>
   <input type="text" bind:value="{discountCode}" />
-  <button on:click="{() => applyDiscountCode(discountCode)}">Apply Code</button>
+  <button on:click="{applyDiscountCode}">Apply Code</button>
 
-  {#if isCodeValid}
+  {#if $isCodeValid}
     <p>Discount code applied!</p>
-    <p>Cost after discount: ${$total}</p>
+    <p>Discount amount: {($discountAmount * 100).toFixed(0)}%</p>
   {/if}
 </div>
-
