@@ -146,29 +146,6 @@
   onMount(() => {
     creditCardPromptElement = document.getElementById("CreditCard");
   });
-
-  // Fetch products that match the specified product groups
-  const coffeeGroups = ["Whole Bean/Teas", "Beverages"];
-
-  supabase
-    .from("Products")
-    .select("product")
-    .in("product_group", coffeeGroups)
-    .then(({ data }) => {
-      const coffeeProducts = data.map((item) => item.product);
-      coffeeOptions.set(coffeeProducts);
-    });
-
-  // Fetch products that match the specified product groups
-  const donutGroups = ["Food"];
-  supabase
-    .from("Products")
-    .select("product")
-    .in("product_group", donutGroups)
-    .then(({ data }) => {
-      const donutProducts = data.map((item) => item.product);
-      donutOptions.set(donutProducts);
-    });
 </script>
 
 <head>
@@ -523,7 +500,16 @@
       {:catch error}
         <p style="color: red">{error.message}</p>
       {/await}
-      <!-- Add this element to display the prompt -->
+
+      <div id="loadingScreen" style="display: none;">
+        <!-- Placeholder for loading screen -->
+        Loading...
+      </div>
+    </section>
+    <hr />
+
+    <!-- Add this element to display the prompt -->
+    <section>
       <div id="CreditCard" class="card-prompt" style="display: none">
         <h2>Enter Credit Card Information</h2>
         <form class="form-horizontal" on:submit={handlePayment}>
@@ -572,12 +558,7 @@
           <button class="close-button" on:click={closePrompt}>Close</button>
         </form>
       </div>
-      <div id="loadingScreen" style="display: none;">
-        <!-- Placeholder for loading screen -->
-        Loading...
-      </div>
     </section>
-    <hr />
   </div>
 
   <script
