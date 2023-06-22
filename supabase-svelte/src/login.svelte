@@ -39,49 +39,90 @@
     }
   }
 </script>
+<main>
+<head>
+  <!-- basic -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- mobile metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <!-- site metas -->
+  <title>Ame de cafe Express</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- bootstrap css -->
+  <link rel="stylesheet" type="text/css" href="src/css/bootstrap.min.css">
+  <!-- style css -->
+  <link rel="stylesheet" type="text/css" href="src/css/style.css">
+  <!-- Responsive-->
+  <link rel="stylesheet" href="src/css/responsive.css">
+  <!-- fevicon -->
+  <link rel="icon" href="src/images/fevicon.png" type="image/gif" />
+  <!-- font css -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
 
-<main class="form-signin w-100 m-auto">
-  <form on:submit|preventDefault={login}>
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-    <div class="form-floating">
-      <input
-        type="email"
-        class="form-control"
-        id="floatingInput"
-        bind:value={email} required
-      />
-      <label for="floatingInput">Email address</label>
+<body>
+  <div class="header_section">
+    <div class="container-fluid">
+       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <!-- svelte-ignore a11y-missing-attribute -->
+          <a class="navbar-brand"><img src="src/images/favicon.ico"></a>
+          <p class="logo_text">Ame de cafe Express</p>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <form class="form-inline my-2 my-lg-0">
+            </form>
+         </div>
+      </nav>
+   </div>
+ <!-- banner section start --> 
+ <div class="banner_section layout_padding">
+  <div class="container-fluid">
+    <div id="banner_slider" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- svelte-ignore a11y-missing-attribute -->
+              <div class="banner_img"><img src="src/images/banner-img.png"></div>
+            </div>
+            <div class="col-md-6">
+              <div class="banner_taital_main">
+                <h1 class="banner_taital">Login</h1>
+                <h5 class="tasty_text">Tasty Of Ame de cafe Express</h5>
+                <div class="btn_main">
+                  <div class="about_bt">
+                    <form on:submit={login}>
+                      <div class="mb-3">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" bind:value={email}>
+                      </div>
+                      <div class="mb-3">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" bind:value={password}>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href = 'home.html'">login</button>
+                      </div>
+                    </form>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-floating">
-      <input
-        type="password"
-        class="form-control"
-        id="floatingPassword"
-        bind:value={password} required
-      />
-      <label for="floatingPassword">Password</label>
-    </div>
-
-    <div class="form-check text-start my-3">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        value="remember-me"
-        id="flexCheckDefault"
-      />
-      <label class="form-check-label" for="flexCheckDefault">
-        Remember me
-      </label>
-    </div>
-    <button class="btn btn-primary w-100 py-2" type="submit"> Sign In </button>
-    <button class="btn btn-primary w-100 py-2" onclick="window.location.href = 'signup.html'"> Sign Up </button>
-
-    <p class="mt-5 mb-3 text-body-secondary">© 2017–2023</p>
-  </form>
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-    crossorigin="anonymous"
-  ></script>
+  </div>
+</div>
+</body>
 </main>
