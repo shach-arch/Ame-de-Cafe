@@ -7,9 +7,7 @@
   // import { Pagination } from 'flowbite-svelte'
   export const itemsInCart = writable(0);
   export const totalCost = writable(0);
-  export const discountAmount = writable(0);
-  export const isCodeValid = false;
-  export const applyDiscountCode = writable([]);
+
 
   const url = "https://ujnattukwsqsjmzuhyoh.supabase.co";
 
@@ -61,6 +59,7 @@
   function addToCart() {
     itemsInCart.update((items) => items + 1);
   }
+ 
   function updateTotalPrice() {
     const priceElement = document.getElementById("currentPrice");
     const priceValue = priceElement.innerHTML;
