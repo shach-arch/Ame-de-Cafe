@@ -2,7 +2,7 @@
 <script>
   import { writable } from 'svelte/store';
 
-  export let totalCost;
+  export let subtotalCost;
   export const isCodeValid = writable(false);
   export const discountAmount = writable(0);
 
@@ -23,7 +23,7 @@
       isCodeValid.set(true);
       discountAmount.set(discount);
       const updatedTotal = calculateDiscountedTotal(discount);
-      totalCost.set(updatedTotal);
+      subtotalCost.set(updatedTotal);
     } else {
       // Code is invalid
       isCodeValid.set(false);
@@ -32,7 +32,7 @@
   }
 
   function calculateDiscountedTotal(discount) {
-    const currentTotal = $totalCost;
+    const currentTotal = $subtotalCost;
     const discountedTotal = currentTotal - currentTotal * discount;
     return discountedTotal;
   }
@@ -47,3 +47,10 @@
     <p>Discount amount: {($discountAmount * 100).toFixed(0)}%</p>
   {/if}
 </div>
+<style>
+  button {
+    color: darksalmon;
+    border: 2px solid darksalmon;
+    background-color: white;
+  }
+</style>

@@ -3,6 +3,7 @@
   import { afterUpdate, onMount } from "svelte";
   import { writable, derived } from "svelte/store";
   import DiscountCodeInput from "./DiscountCodeInput.svelte";
+  import OrderTracker from "./OrderTracker.svelte";
   export const itemsInCart = writable(0);
   export const totalCost = writable(0);
 
@@ -110,6 +111,7 @@
     const prompt = document.getElementById("CreditCard");
     prompt.style.display = "none";
   }
+  
 
   function handlePayment(event) {
     event.preventDefault();
@@ -140,6 +142,7 @@
   onMount(() => {
     creditCardPromptElement = document.getElementById("CreditCard");
   });
+  
 </script>
 
 <main>
@@ -284,25 +287,11 @@
                     <a
                       href="#"
                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                      >New</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                      >Processed</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-                      >Shipped</a
-                    >
-                  </li>
+                      >Track</a>
+                      <OrderTracker/>
+                  </li>  
                 </ul>
-              </div>
+                </div>
             </li>
             <li class="border-top my-3" />
             <li class="mb-1">
@@ -325,14 +314,6 @@
                       >Items: {$itemsInCart}</a
                     >
                   </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="link-dark d-inline-flex text-decoration-none rounded"
-                    >
-                      Total Price: ${$totalCost.toFixed(2)}
-                    </a>
-                  </li>
 
                   <li>
                     <button
@@ -342,11 +323,6 @@
                       id="checkoutButton"
                       on:click={showPrompt}>Checkout</button
                     >
-                  </li>
-
-                  <li>
-                    <!-- Add the DiscountCodeInput component below the Total Price -->
-                    <DiscountCodeInput {totalCost} />
                   </li>
                 </ul>
               </div>

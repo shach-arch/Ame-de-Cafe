@@ -1,5 +1,6 @@
 <script>
   import { createClient } from "@supabase/supabase-js";
+  import DiscountCodeInput from "../DiscountCodeInput.svelte";
   const url = "https://ujnattukwsqsjmzuhyoh.supabase.co";
   const anonKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqbmF0dHVrd3Nxc2ptenVoeW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU1OTUyMDgsImV4cCI6MjAwMTE3MTIwOH0.G9dIZVpPY5ylDQD63YRjGFGuP3LGtECuQndt8OdxtZM";
@@ -17,6 +18,7 @@
   });
 
   let promise = filter();
+  
 
   async function filter() {
     try {
@@ -61,6 +63,25 @@
 
     console.log(subtotal);
   }
+  const cardNumberInput = document.getElementById('cardNumber');
+  const cardNumber = cardNumberInput instanceof HTMLInputElement ? cardNumberInput.value : '';
+
+  function generateRandomId() {
+    var randomNumber = Math.floor(Math.random() * 1000000); // Generates a random number between 0 and 999999
+    var paddedNumber = String(randomNumber).padStart(6, '0'); // Pads the number with leading zeros to ensure it has 6 digits
+    var randomId = paddedNumber; // Prefixes the number with 'ID'
+    return randomId;
+  }
+  // Generate a random ID
+  var id = generateRandomId();
+    console.log(id);
+    // Assuming orderStatus is defined and holds the order status value
+    supabase
+      .from('Orders')
+      .insert({ order_id: id, credit_card: cardNumber, status:"pending" })
+      .then(response => {
+        console.log('Order inserted successfully:', response);
+      })
 </script>
 
 <main>
@@ -177,7 +198,7 @@
                             minlength="19"
                             maxlength="19"
                           />
-                          <label class="form-label" for="typeText"
+                          <label class="form-label" for="typeText" id="cardNumber"
                             >Card Number</label
                           >
                         </div>
@@ -235,21 +256,12 @@
                           <p class="mb-2">Total(Incl. taxes)</p>
                           <p class="mb-2">${subtotal.toFixed(2)}</p>
                         </div>
-
-                        <button
-                          type="button"
-                          class="btn btn-info btn-block btn-lg"
-                        >
+                        <a href="home.html" class="btn btn-info btn-block btn-lg">
                           <div class="d-flex justify-content-between">
-                            <span
-                              >${subtotal.toFixed(2)}
-                              Checkout
-                              <i
-                                class="fas fa-long-arrow-alt-right ms-2"
-                              /></span
-                            >
+                            <span>${subtotal.toFixed(2)} Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                           </div>
-                        </button>
+                        </a>
+                        
                       {/await}
                     </div>
                   </div>

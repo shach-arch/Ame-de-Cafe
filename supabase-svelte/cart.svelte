@@ -161,8 +161,8 @@
                
                         <p>Total Price: ${$totalCost.toFixed(2)}</p>
                             <button id="checkoutButton" on:click={showPrompt}>Checkout</button>
-                            <!-- Add the DiscountCodeInput component below the Total Price -->
-                            <DiscountCodeInput {totalCost}/>
+                                                      <!-- Add the DiscountCodeInput component below the Total Price -->
+                        <DiscountCodeInput/>
                    
                   <!-- Add this element to display the prompt -->
                   <div id="CreditCard" class="card-prompt" style="display: none">
@@ -194,6 +194,7 @@
                     <!-- Placeholder for loading screen -->
                     Loading...
                   </div>                 
+      </section>
               <hr />
                 </div>
                 

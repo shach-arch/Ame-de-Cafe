@@ -43,13 +43,4 @@
   </nav>
 </section>
 
-<style>
-  .header_bg {
-    width: 100%;
-    float: left;
-    background-image: url(../static/images/header-bg.png);
-    height: auto;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-</style>
+
